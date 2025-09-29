@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mi Blog CRT</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-main: #040404;
+        --bg-panel: rgba(5, 14, 5, 0.95);
+        --grid-color: rgba(10, 32, 10, 0.45);
+        --text-primary: #8fff7a;
+        --text-secondary: #54c461;
+        --text-dim: #2f7036;
+        --accent: #9dff78;
+        --accent-strong: #4aff3a;
+        --error: #ff3b3b;
+        --warning: #f0e161;
+        --success: #85ff5f;
+        --border-thick: 1px;
+        --shadow-hard: 10px 10px 0 rgba(0, 0, 0, 0.7);
+      }
+
+      @keyframes reveal {
+        from {
+          clip-path: inset(50% 100% 50% 0);
+          opacity: 0;
+        }
+        to {
+          clip-path: inset(0 0 0 0);
+          opacity: 1;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg-main);
+        color: var(--text-primary);
+        font-family: "Share Tech Mono", "IBM Plex Mono", "VT323", monospace;
+        padding: 48px 6vw 64px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      #node-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        border: var(--border-thick) solid var(--accent);
+        padding: 32px clamp(16px, 5vw, 48px);
+        background: var(--bg-panel);
+        box-shadow: var(--shadow-hard);
+        position: relative;
+        z-index: 1;
+      }
+
+      header {
+        padding: 32px clamp(16px, 6vw, 64px);
+        border: var(--border-thick) solid var(--accent-strong);
+        background: rgba(0, 8, 0, 0.9);
+        position: relative;
+        overflow: hidden;
+      }
+
+      header::before {
+        content: "[STATUS: LINKED]";
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        letter-spacing: 4px;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 4.5vw, 3.5rem);
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        border-bottom: var(--border-thick) solid var(--accent);
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+      }
+
+      header p {
+        margin: 0;
+        font-size: clamp(0.9rem, 2vw, 1.15rem);
+        color: var(--text-secondary);
+        line-height: 1.6;
+        max-width: 680px;
+      }
+
+      main {
+        display: grid;
+        gap: 36px;
+        margin-top: 36px;
+      }
+
+      section {
+        border: var(--border-thick) solid var(--accent);
+        padding: 28px clamp(18px, 4vw, 40px);
+        background: rgba(0, 9, 1, 0.88);
+        position: relative;
+      }
+
+      section::before {
+        content: attr(data-label);
+        position: absolute;
+        top: -18px;
+        left: 22px;
+        background: var(--bg-main);
+        padding: 4px 14px;
+        border: var(--border-thick) solid var(--accent-strong);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+      }
+
+      section h2 {
+        margin: 0 0 20px;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+      }
+
+      form {
+        display: grid;
+        gap: 24px;
+        animation: reveal 0.7s ease forwards;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      @media (min-width: 720px) {
+        .form-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .form-grid textarea {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 540px) {
+        .headline-hyphen {
+          display: none;
+        }
+        header h1 {
+          font-size: clamp(1.4rem, 6vw, 1.9rem);
+          letter-spacing: 3px;
+          word-spacing: 6px;
+          line-height: 1.25;
+          text-align: center;
+        }
+      }
+
+      label {
+        display: grid;
+        gap: 10px;
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 3px;
+        color: var(--text-secondary);
+      }
+
+      input,
+      textarea,
+      select {
+        background: rgba(13, 45, 13, 0.25);
+        border: var(--border-thick) solid var(--accent);
+        color: var(--text-primary);
+        padding: 14px 18px;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-transform: none;
+        min-height: 56px;
+      }
+
+      textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      select {
+        appearance: none;
+        cursor: pointer;
+        background-image: linear-gradient(
+            45deg,
+            transparent 50%,
+            var(--accent) 50%
+          ),
+          linear-gradient(135deg, var(--accent) 50%, transparent 50%);
+        background-position: calc(100% - 24px) calc(50% - 3px),
+          calc(100% - 18px) calc(50% - 3px);
+        background-size: 6px 6px, 6px 6px;
+        background-repeat: no-repeat;
+      }
+
+      select:focus {
+        outline: none;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        transform: translate(-4px, -4px);
+        box-shadow: 10px 10px 0 rgba(157, 255, 120, 0.3);
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(141, 255, 122, 0.3);
+        letter-spacing: 2px;
+      }
+
+      select option {
+        background: #041104;
+        color: var(--text-primary);
+      }
+
+      button {
+        justify-self: start;
+        background: var(--accent);
+        color: #021002;
+        border: var(--border-thick) solid var(--accent-strong);
+        padding: 16px 32px;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      button:hover {
+        transform: translate(-6px, -6px);
+        box-shadow: 12px 12px 0 rgba(157, 255, 120, 0.4);
+      }
+
+      button:active {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 rgba(157, 255, 120, 0.35);
+      }
+
+      #posts-list {
+        display: grid;
+        gap: 18px;
+      }
+
+      .post {
+        border: var(--border-thick) solid var(--accent-strong);
+        padding: 24px 22px;
+        background: rgba(4, 17, 5, 0.95);
+        position: relative;
+        overflow: hidden;
+        animation: reveal 0.6s ease forwards;
+      }
+
+      .post::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border: 1px dashed rgba(157, 255, 120, 0.35);
+        pointer-events: none;
+      }
+
+      .post h3 {
+        margin: 0 0 12px;
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .post p {
+        margin: 0 0 16px;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        font-size: 0.95rem;
+      }
+
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        font-size: 0.85rem;
+        color: var(--text-dim);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+      }
+
+      .post-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .badge {
+        border: var(--border-thick) solid currentColor;
+        padding: 6px 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+      }
+
+      .badge[data-status="draft"] {
+        color: var(--warning);
+      }
+      .badge[data-status="archived"] {
+        color: var(--error);
+      }
+      .badge[data-status="published"],
+      .badge[data-status="success"] {
+        color: var(--success);
+      }
+
+      .empty-state,
+      .error-message {
+        border: var(--border-thick) solid var(--accent);
+        padding: 28px 16px;
+        text-align: center;
+        background: rgba(7, 26, 7, 0.9);
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+      }
+
+      .loader {
+        display: inline-flex;
+        gap: 14px;
+        margin-bottom: 14px;
+      }
+
+      .loader span {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: var(--border-thick) solid var(--accent-strong);
+        background: rgba(157, 255, 120, 0.08);
+        animation: loader-pulse 1.2s infinite;
+      }
+
+      .loader span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .loader span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+
+      @keyframes loader-pulse {
+        0%,
+        100% {
+          transform: scale(0.8);
+          opacity: 0.6;
+        }
+        50% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .toast-container {
+        position: fixed;
+        top: 24px;
+        right: 24px;
+        display: grid;
+        gap: 14px;
+        z-index: 999;
+      }
+
+      .toast {
+        background: rgba(3, 10, 3, 0.95);
+        border: var(--border-thick) solid currentColor;
+        color: var(--text-primary);
+        padding: 12px 16px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: reveal 0.4s ease forwards;
+      }
+
+      .toast.success {
+        color: var(--success);
+      }
+      .toast.error {
+        color: var(--error);
+      }
+      .toast.warning {
+        color: var(--warning);
+      }
+
+      .toast button {
+        margin-left: auto;
+        background: none;
+        border: none;
+        color: inherit;
+        cursor: pointer;
+        font-size: 1.2rem;
+        padding: 0;
+      }
+
+      .toast button:hover {
+        transform: scale(1.1);
+      }
+
+      .post {
+        padding-top: 48px; /* Mantener el espacio arriba */
+      }
+
+      .post-index {
+        position: absolute;
+        top: 12px; /* DENTRO del contenedor, no fuera */
+        left: 12px;
+        transform: none; /* Sin translate que lo saque fuera */
+        border: var(--border-thick) solid var(--accent);
+        background: rgba(6, 24, 6, 0.9);
+        padding: 6px 12px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: var(--accent);
+        box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.6);
+        z-index: 2;
+      }
+
+      .nav-link {
+        display: inline-block;
+        margin-top: 16px;
+        color: var(--accent);
+        text-decoration: none;
+        border: 1px solid var(--accent);
+        padding: 8px 16px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        transition: all 0.3s ease;
+      }
+      .nav-link:hover {
+        background: var(--accent);
+        color: var(--bg-main);
+        box-shadow: 0 0 12px rgba(157, 255, 120, 0.4);
+      }
+
+      .delete-post {
+        background: #cd6000;
+        color: var(--bg-main);
+        border-color: #cd6000;
+        padding: 2px 8px;
+        font-size: 0.8rem;
+      }
+      .delete-post:hover {
+        background: #ff7900;
+        box-shadow: 0 0 12px rgba(255, 121, 0, 0.4);
+      }
+
+      /* Panel OUTPUT con contornos finos y glow suave */
+      section[data-label="OUTPUT"] {
+        border: 1px solid rgba(157, 255, 120, 0.45);
+        background: linear-gradient(
+            145deg,
+            rgba(157, 255, 120, 0.08) 0%,
+            rgba(6, 20, 8, 0.9) 55%,
+            rgba(2, 8, 3, 0.95) 100%
+          ),
+          rgba(0, 6, 0, 0.96);
+        box-shadow: 0 0 16px rgba(74, 255, 58, 0.18),
+          inset 0 0 12px rgba(74, 255, 58, 0.08);
+        position: relative;
+      }
+
+      section[data-label="OUTPUT"]::before {
+        background: rgba(6, 26, 8, 0.95); /* etiqueta sólida */
+        border: 1px solid rgba(157, 255, 120, 0.55);
+        color: var(--accent);
+        box-shadow: 0 0 12px rgba(157, 255, 120, 0.22);
+      }
+
+      section[data-label="OUTPUT"]::after {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border: 1px solid rgba(157, 255, 120, 0.18);
+        pointer-events: none;
+        opacity: 1;
+      }
+
+      /* Tarjetas de post finas y uniformes */
+      section[data-label="OUTPUT"] .post {
+        border: 1px solid rgba(157, 255, 120, 0.38);
+        background: rgba(5, 15, 6, 0.96);
+        padding: 36px 22px 22px;
+        overflow: visible;
+      }
+
+      section[data-label="OUTPUT"] .post::before {
+        border: 1px solid rgba(157, 255, 120, 0.18);
+      }
+
+      section[data-label="OUTPUT"] .post-index {
+        border: 1px solid rgba(157, 255, 120, 0.55);
+        background: rgba(7, 26, 8, 0.96);
+        padding: 5px 12px;
+        font-size: 0.7rem;
+        box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.45);
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        animation: reveal 0.3s ease;
+      }
+      .modal {
+        background: var(--bg-panel);
+        border: 1px solid var(--accent);
+        box-shadow: var(--shadow-hard);
+        padding: 28px clamp(18px, 4vw, 40px);
+        width: min(90vw, 600px);
+      }
+      .modal h2 {
+        margin-top: 0;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+      }
+      .modal-actions {
+        margin-top: 24px;
+        display: flex;
+        justify-content: flex-end;
+        gap: 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="node-canvas"></canvas>
+
+    <div id="modal-overlay" class="modal-overlay" style="display: none;">
+      <div id="modal" class="modal">
+        <h2 id="modal-title"></h2>
+        <div id="modal-content"></div>
+        <div id="modal-actions" class="modal-actions"></div>
+      </div>
+    </div>
+
+    <div class="toast-container" id="toast-container"></div>
+
+    <div class="container">
+      <header>
+        <h1>
+          S. Y. N. T. H.
+          <span class="headline-hyphen" aria-hidden="true">-</span> B L O G
+        </h1>
+        <p>
+          INTERFAZ DE VALIDACIÓN REMOTA • Conecta tu API REST, dispara
+          peticiones POST y monitoriza respuestas en vivo. Esta consola emula el
+          flujo de datos de un monitor fosforescente clásico, ideal para pruebas
+          de integración.
+        </p>
+        <a href="productos_leprechaun.html" class="nav-link">[ Acceder a Listado de Productos ]</a>
+      </header>
+
+      <main>
+        <section data-label="INPUT">
+          <h2>Crear nuevo post</h2>
+          <form id="create-post-form" novalidate>
+            <div class="form-grid">
+              <label>
+                Título del post
+                <input
+                  type="text"
+                  id="title"
+                  placeholder="// Introduce título"
+                  required
+                  minlength="3"
+                />
+              </label>
+              <label>
+                Estado
+                <select id="status">
+                  <option value="draft">Borrador (Draft)</option>
+                  <option value="published">Publicado (Published)</option>
+                </select>
+              </label>
+              <label>
+                Contenido
+                <textarea
+                  id="content"
+                  placeholder="// Carga de contenido..."
+                ></textarea>
+              </label>
+            </div>
+            <button type="submit">Transmitir entrada</button>
+          </form>
+        </section>
+
+        <section data-label="OUTPUT">
+          <h2>Posts recientes</h2>
+          <div id="posts-list" aria-live="polite">
+            <div class="empty-state">
+              <div class="loader" aria-hidden="true">
+                <span></span><span></span><span></span>
+              </div>
+              <p>Iniciando enlace con API...</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const API_URL = "http://localhost:8000/api.php";
+      const API_KEY = "my-secret-api-key";
+      const postsList = document.getElementById("posts-list");
+      const createPostForm = document.getElementById("create-post-form");
+      const toastContainer = document.getElementById("toast-container");
+
+      document.addEventListener("DOMContentLoaded", fetchPosts);
+      createPostForm.addEventListener("submit", createPost);
+
+      async function fetchPosts() {
+        renderLoader();
+        try {
+          const response = await fetch(API_URL, {
+            headers: {
+              Accept: "application/json",
+              Authorization: API_KEY,
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          const posts = await response.json();
+          renderPosts(Array.isArray(posts) ? posts : []);
+        } catch (error) {
+          console.error("Error al obtener los posts:", error);
+          renderError("Fallo en la sincronización. Verifica el servidor.");
+          showToast("Sin enlace con la API. Revisa el backend.", "error");
+        }
+      }
+
+      async function createPost(event) {
+        event.preventDefault();
+
+        const titleInput = document.getElementById("title");
+        const contentInput = document.getElementById("content");
+        const statusInput = document.getElementById("status");
+
+        if (!titleInput.value.trim()) {
+          showToast("Título requerido. Reinicia secuencia.", "warning");
+          titleInput.focus();
+          return;
+        }
+
+        const payload = {
+          title: titleInput.value.trim(),
+          content: contentInput.value.trim() || null,
+          status: (statusInput.value || "published").toLowerCase(),
+        };
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: API_KEY,
+            },
+            body: JSON.stringify(payload),
+          });
+
+          if (!response.ok) {
+            const errorBody = await safeJson(response);
+            const message =
+              (errorBody && errorBody.message) ||
+              `Error ${response.status} al crear el post.`;
+            throw new Error(message);
+          }
+
+          const newPost = await response.json();
+          showToast("Entrada registrada.", "success");
+
+          createPostForm.reset();
+          titleInput.focus();
+
+          const emptyState = postsList.querySelector(".empty-state");
+          if (emptyState) {
+            postsList.innerHTML = "";
+          }
+
+          const postElement = createPostElement(
+            newPost,
+            0,
+            postsList.children.length + 1
+          );
+          postsList.prepend(postElement);
+        } catch (error) {
+          console.error("Error al crear el post:", error);
+          showToast(
+            error.message || "No se pudo registrar la entrada.",
+            "error"
+          );
+        }
+      }
+
+      postsList.addEventListener("click", (event) => {
+        if (event.target.classList.contains("view-post")) {
+          const postId = event.target.dataset.id;
+          viewPost(postId);
+        }
+        if (event.target.classList.contains("delete-post")) {
+          const postId = event.target.dataset.id;
+          deletePost(postId);
+        }
+      });
+
+      async function viewPost(postId) {
+        try {
+          const response = await fetch(`${API_URL}?id=${postId}`, {
+            headers: {
+              Accept: "application/json",
+              Authorization: API_KEY,
+            },
+          });
+          if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+          }
+          const post = await response.json();
+          showModal(
+            post.title,
+            `<p>${escapeHtml(post.content)}</p>`,
+            [{ label: 'Cerrar', className: 'button' }]
+          );
+        } catch (error) {
+          console.error("Error al obtener el post:", error);
+          showToast("No se pudo obtener el post.", "error");
+        }
+      }
+
+      async function deletePost(postId) {
+        showModal(
+          'Confirmar Eliminación',
+          '<p>¿Estás seguro de que quieres eliminar este post? Esta acción no se puede deshacer.</p>',
+          [
+            {
+              label: 'Cancelar',
+              className: 'button',
+            },
+            {
+              label: 'Eliminar',
+              className: 'button delete-post',
+              callback: async () => {
+                try {
+                  const response = await fetch(API_URL, {
+                    method: 'DELETE',
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': API_KEY,
+                    },
+                    body: JSON.stringify({ id: postId }),
+                  });
+
+                  if (!response.ok) {
+                    const errorBody = await safeJson(response);
+                    const message = (errorBody && errorBody.message) || `Error ${response.status} al eliminar el post.`;
+                    throw new Error(message);
+                  }
+
+                  showToast('Post eliminado exitosamente.', 'success');
+                  const postElement = document.querySelector(`.post[data-id='${postId}']`);
+                  if (postElement) {
+                    postElement.remove();
+                  }
+                } catch (error) {
+                  console.error('Error al eliminar el post:', error);
+                  showToast(error.message || 'No se pudo eliminar el post.', 'error');
+                }
+              }
+            }
+          ]
+        );
+      }
+
+      function renderLoader() {
+        postsList.innerHTML = `
+          <div class="empty-state">
+            <div class="loader" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </div>
+            <p>Iniciando enlace con API...</p>
+          </div>
+        `;
+      }
+
+      function renderError(message) {
+        postsList.innerHTML = `
+          <div class="error-message">
+            <p>${escapeHtml(message)}</p>
+          </div>
+        `;
+      }
+
+      function createPostElement(post, index, total) {
+        const displayId = String(total - index).padStart(3, "0");
+        const postElement = document.createElement("article");
+        postElement.classList.add("post");
+        postElement.dataset.id = post.id;
+        postElement.style.animationDelay = `${index * 0.05}s`;
+
+        const createdAt = formatDate(post.created_at);
+        const status = (post.status || "unknown").toLowerCase();
+
+        postElement.innerHTML = `
+            <div class="post-index">${displayId}</div>
+            <header>
+                <h3>${escapeHtml(post.title || "Registro sin título")}</h3>
+            </header>
+            <p>${escapeHtml(post.content || "Contenido no especificado.")}</p>
+            <footer class="meta">
+                <div>
+                    <span class="badge" data-status="${escapeHtml(status)}">
+                        STATUS: ${escapeHtml(status)}
+                    </span>
+                    <time datetime="${escapeHtml(post.created_at || "")}">
+                        ${escapeHtml(createdAt || "FECHA DESCONOCIDA")}
+                    </time>
+                </div>
+                <div class="post-actions">
+                    <button class="view-post" data-id="${post.id}">View</button>
+                    <button class="delete-post" data-id="${post.id}">[X]</button>
+                </div>
+            </footer>
+        `;
+        return postElement;
+      }
+
+      function renderPosts(posts) {
+        if (!posts.length) {
+          postsList.innerHTML = `
+            <div class="empty-state">
+                <p>No hay registros. Transmite tu primera entrada.</p>
+            </div>
+        `;
+          return;
+        }
+
+        postsList.innerHTML = "";
+        const total = posts.length;
+
+        posts.forEach((post, index) => {
+          const postElement = createPostElement(post, index, total);
+          postsList.appendChild(postElement);
+        });
+      }
+
+      function showToast(message, type = "success") {
+        const toast = document.createElement("div");
+        toast.className = `toast ${type}`;
+        toast.innerHTML = `
+          <span>${escapeHtml(message)}</span>
+          <button aria-label="Cerrar notificación">×</button>
+        `;
+
+        const closeButton = toast.querySelector("button");
+        const removeToast = () => toast.remove();
+        closeButton.addEventListener("click", removeToast);
+
+        toastContainer.appendChild(toast);
+        setTimeout(removeToast, 4200);
+      }
+
+      function showModal(title, content, actions = []) {
+        const modalOverlay = document.getElementById('modal-overlay');
+        const modalTitle = document.getElementById('modal-title');
+        const modalContent = document.getElementById('modal-content');
+        const modalActions = document.getElementById('modal-actions');
+
+        modalTitle.textContent = title;
+        modalContent.innerHTML = content;
+        modalActions.innerHTML = '';
+
+        actions.forEach(action => {
+          const button = document.createElement('button');
+          button.textContent = action.label;
+          button.className = action.className || 'button';
+          button.addEventListener('click', () => {
+            modalOverlay.style.display = 'none';
+            if (action.callback) {
+              action.callback();
+            }
+          });
+          modalActions.appendChild(button);
+        });
+
+        modalOverlay.style.display = 'flex';
+      }
+
+      function escapeHtml(value) {
+        if (typeof value !== "string") return value;
+        return value.replace(
+          /[&<>"']/g,
+          (match) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            }[match])
+        );
+      }
+
+      function formatDate(dateString) {
+        if (!dateString) return null;
+        const date = new Date(dateString);
+        if (Number.isNaN(date.getTime())) return dateString;
+        return date.toLocaleString("es-ES", {
+          dateStyle: "medium",
+          timeStyle: "short",
+        });
+      }
+
+      async function safeJson(response) {
+        try {
+          return await response.json();
+        } catch {
+          return null;
+        }
+      }
+    </script>
+    <script>
+    const canvas = document.getElementById('node-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let nodes = [];
+    const numNodes = 50;
+    const maxDist = 200;
+    let mouse = { x: null, y: null };
+
+    // Node class
+    class Node {
+        constructor(x, y, vx, vy) {
+            this.x = x;
+            this.y = y;
+            this.vx = vx;
+            this.vy = vy;
+            this.radius = 2;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(157, 255, 120, 0.5)';
+            ctx.fill();
+        }
+
+        update() {
+            if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+            if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+            this.x += this.vx;
+            this.y += this.vy;
+        }
+    }
+
+    // Create nodes
+    function init() {
+        nodes = [];
+        for (let i = 0; i < numNodes; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const vx = (Math.random() - 0.5) * 0.5;
+            const vy = (Math.random() - 0.5) * 0.5;
+            nodes.push(new Node(x, y, vx, vy));
+        }
+    }
+
+    // Draw lines between nodes
+    function drawLines() {
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+                if (dist < maxDist) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    
+    // Draw lines to mouse
+    function drawMouseLines() {
+        if (mouse.x === null) return;
+        for (let i = 0; i < nodes.length; i++) {
+            const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
+            if (dist < maxDist) {
+                ctx.beginPath();
+                ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        nodes.forEach(node => {
+            node.update();
+            node.draw();
+        });
+        drawLines();
+        drawMouseLines();
+        requestAnimationFrame(animate);
+    }
+
+    // Event listeners
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    init();
+    animate();
+</script>
+  </body>
+</html>

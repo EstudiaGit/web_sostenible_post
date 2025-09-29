@@ -1,0 +1,12 @@
+{
+    "name": "personal/workshop_api_rest",
+    "description": "testeo de API REST",
+    "type": "project",
+    "authors": [
+        {
+            "name": "EStudiaGit",
+            "email": "estudia.git@gmail.com"
+        }
+    ],
+    "require": {}
+}

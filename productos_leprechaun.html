@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Productos de Leprechaun - Mi Blog CRT</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-main: #040404;
+        --bg-panel: rgba(5, 14, 5, 0.95);
+        --grid-color: rgba(10, 32, 10, 0.45);
+        --text-primary: #8fff7a;
+        --text-secondary: #54c461;
+        --text-dim: #2f7036;
+        --accent: #9dff78;
+        --accent-strong: #4aff3a;
+        --error: #ff3b3b;
+        --warning: #f0e161;
+        --success: #85ff5f;
+        --border-thick: 1px;
+        --shadow-hard: 10px 10px 0 rgba(0, 0, 0, 0.7);
+      }
+
+      @keyframes reveal {
+        from {
+          clip-path: inset(50% 100% 50% 0);
+          opacity: 0;
+        }
+        to {
+          clip-path: inset(0 0 0 0);
+          opacity: 1;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: var(--bg-main);
+        color: var(--text-primary);
+        font-family: "Share Tech Mono", "IBM Plex Mono", "VT323", monospace;
+        padding: 48px 6vw 64px;
+        position: relative;
+        overflow-x: hidden;
+      }
+      #node-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        border: var(--border-thick) solid var(--accent);
+        padding: 32px clamp(16px, 5vw, 48px);
+        background: var(--bg-panel);
+        box-shadow: var(--shadow-hard);
+        position: relative;
+        z-index: 1;
+      }
+      header {
+        padding: 32px clamp(16px, 6vw, 64px);
+        border: var(--border-thick) solid var(--accent-strong);
+        background: rgba(0, 8, 0, 0.9);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 36px;
+      }
+      header::before {
+        content: "[STATUS: LINKED]";
+        position: absolute;
+        top: 18px;
+        right: 22px;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        letter-spacing: 4px;
+      }
+      header h1 {
+        margin: 0;
+        font-size: clamp(1.8rem, 4vw, 3rem);
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        border-bottom: var(--border-thick) solid var(--accent);
+        padding-bottom: 14px;
+        margin-bottom: 18px;
+      }
+      header p {
+        margin: 0;
+        font-size: clamp(0.9rem, 2vw, 1.15rem);
+        color: var(--text-secondary);
+        line-height: 1.6;
+        max-width: 680px;
+      }
+      main {
+        display: grid;
+        gap: 36px;
+      }
+      section {
+        border: var(--border-thick) solid var(--accent);
+        padding: 28px clamp(18px, 4vw, 40px);
+        background: rgba(0, 9, 1, 0.88);
+        position: relative;
+      }
+      section::before {
+        content: attr(data-label);
+        position: absolute;
+        top: -18px;
+        left: 22px;
+        background: var(--bg-main);
+        padding: 4px 14px;
+        border: var(--border-thick) solid var(--accent-strong);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.75rem;
+      }
+      section h2 {
+        margin: 0 0 20px;
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 5px;
+      }
+      .nav-link {
+        display: inline-block;
+        margin-top: 16px;
+        color: var(--accent);
+        text-decoration: none;
+        border: 1px solid var(--accent);
+        padding: 8px 16px;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        transition: all 0.3s ease;
+      }
+      .nav-link:hover {
+        background: var(--accent);
+        color: var(--bg-main);
+        box-shadow: 0 0 12px rgba(157, 255, 120, 0.4);
+      }
+      .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+      }
+      .product-card {
+        border: 1px solid rgba(157, 255, 120, 0.38);
+        padding: 16px;
+        text-align: center;
+        background: rgba(5, 15, 6, 0.96);
+        animation: reveal 0.6s ease forwards;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+      .product-card img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 12px;
+        border: 1px solid rgba(157, 255, 120, 0.38);
+      }
+      .product-card h3 {
+        margin: 0 0 8px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: var(--text-primary);
+      }
+      .product-card p {
+        margin: 0;
+        color: var(--accent-strong);
+        font-size: 1.1rem;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="node-canvas"></canvas>
+    <div class="container">
+      <header>
+        <h1>Productos Leprechaun.es</h1>
+        <p>
+          Listado de productos extraídos de la web de Leprechaun.es el
+          29/09/2025.
+        </p>
+        <a href="index.html" class="nav-link">[ Volver a S.Y.N.T.H. BLOG ]</a>
+      </header>
+      <main>
+        <section data-label="Nuevos Productos">
+          <h2>Nuevos Productos</h2>
+          <div class="product-grid">
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47987-home_default/frigth-zone-playset-masters-of-the-universe-origins.jpg"
+                alt="Frigth Zone PLayset Masters Of The Universe Origins"
+              />
+              <h3>Frigth Zone PLayset Masters Of The Universe Origins</h3>
+              <p>101,58&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
+                alt="Rom 02. La Etapa Marvel Original"
+              />
+              <h3>Rom 02. La Etapa Marvel Original</h3>
+              <p>71,25&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47981-home_default/rom-01-la-etapa-marvel-original.jpg"
+                alt="Rom 01. La Etapa Marvel Original"
+              />
+              <h3>Rom 01. La Etapa Marvel Original</h3>
+              <p>76,00&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47977-home_default/bohemian-rhapsody-blu-ray-4k-ultra-hd.jpg"
+                alt="Bohemian Rhapsody Blu-Ray 4K Ultra HD"
+              />
+              <h3>Bohemian Rhapsody Blu-Ray 4K Ultra HD</h3>
+              <p>16,96&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47975-home_default/rambo-acorralado-blu-ray-4k-ultra-hd.jpg"
+                alt="Rambo: Acorralado Blu-Ray 4K Ultra HD"
+              />
+              <h3>Rambo: Acorralado Blu-Ray 4K Ultra HD</h3>
+              <p>16,96&nbsp;€</p>
+            </div>
+          </div>
+        </section>
+        <section data-label="Los más vendidos">
+          <h2>Los más vendidos</h2>
+          <div class="product-grid">
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/3475-home_default/figura-18-cm-police-disguise-t-1000-terminator-genysis.jpg"
+                alt="FIGURA 18 CM POLICE DISGUISE T-1000 TERMINATOR GENYSIS"
+              />
+              <h3>FIGURA 18 CM POLICE DISGUISE T-1000 TERMINATOR GENYSIS</h3>
+              <p>33,58&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/2019-home_default/figura-scout-trooper-star-wars-black-series-archive-15-cm.jpg"
+                alt="Figura Scout Trooper Star Wars Black Series Archive 15 Cm"
+              />
+              <h3>Figura Scout Trooper Star Wars Black Series Archive 15 Cm</h3>
+              <p>25,08&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/17839-home_default/figura-spider-man-2099-15-cm-marvel-legends-vintage-f0230.jpg"
+                alt="Figura Spider-Man 2099 15 Cm Marvel Legends Vintage (F0230)"
+              />
+              <h3>
+                Figura Spider-Man 2099 15 Cm Marvel Legends Vintage (F0230)
+              </h3>
+              <p>42,08&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/2965-home_default/vehiculo-star-wars-resistance-a-wing-fighter-c1249c1248-force-link.jpg"
+                alt="VEHÍCULO STAR WARS RESISTANCE A-WING FIGHTER (C1249/C1248) (FORCE LINK)"
+              />
+              <h3>
+                VEHÍCULO STAR WARS RESISTANCE A-WING FIGHTER (C1249/C1248)
+                (FORCE LINK)
+              </h3>
+              <p>27,65&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/12575-home_default/figura-dr-doom-15-cm-marvel-legends-f2796-baf-xemnu.jpg"
+                alt="Figura Dr. Doom 15 Cm Marvel Legends (F2796) (BAF: Xemnu)"
+              />
+              <h3>Figura Dr. Doom 15 Cm Marvel Legends (F2796) (BAF: Xemnu)</h3>
+              <p>25,08&nbsp;€</p>
+            </div>
+          </div>
+        </section>
+        <section data-label="Cómics">
+          <h2>Cómics</h2>
+          <div class="product-grid">
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47387-home_default/blue-lock-27.jpg"
+                alt="Blue Lock 27"
+              />
+              <h3>Blue Lock 27</h3>
+              <p>8,08&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/30049-home_default/komi-san-no-puede-comunicarse-1.jpg"
+                alt="Komi San No Puede Comunicarse 1"
+              />
+              <h3>Komi San No Puede Comunicarse 1</h3>
+              <p>12,83&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47067-home_default/solo-leveling-8.jpg"
+                alt="Solo Leveling 8"
+              />
+              <h3>Solo Leveling 8</h3>
+              <p>13,78&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
+                alt="Rom 02. La Etapa Marvel Original"
+              />
+              <h3>Rom 02. La Etapa Marvel Original</h3>
+              <p>71,25&nbsp;€</p>
+            </div>
+            <div class="product-card">
+              <img
+                src="https://www.leprechaun.es/38983-home_default/unleash.jpg"
+                alt="Unleash"
+              />
+              <h3>Unleash</h3>
+              <p>19,00&nbsp;€</p>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script>
+    const canvas = document.getElementById('node-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let nodes = [];
+    const numNodes = 50;
+    const maxDist = 200;
+    let mouse = { x: null, y: null };
+
+    // Node class
+    class Node {
+        constructor(x, y, vx, vy) {
+            this.x = x;
+            this.y = y;
+            this.vx = vx;
+            this.vy = vy;
+            this.radius = 2;
+        }
+
+        draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(157, 255, 120, 0.5)';
+            ctx.fill();
+        }
+
+        update() {
+            if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+            if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+            this.x += this.vx;
+            this.y += this.vy;
+        }
+    }
+
+    // Create nodes
+    function init() {
+        nodes = [];
+        for (let i = 0; i < numNodes; i++) {
+            const x = Math.random() * canvas.width;
+            const y = Math.random() * canvas.height;
+            const vx = (Math.random() - 0.5) * 0.5;
+            const vy = (Math.random() - 0.5) * 0.5;
+            nodes.push(new Node(x, y, vx, vy));
+        }
+    }
+
+    // Draw lines between nodes
+    function drawLines() {
+        for (let i = 0; i < nodes.length; i++) {
+            for (let j = i + 1; j < nodes.length; j++) {
+                const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
+                if (dist < maxDist) {
+                    ctx.beginPath();
+                    ctx.moveTo(nodes[i].x, nodes[i].y);
+                    ctx.lineTo(nodes[j].x, nodes[j].y);
+                    ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+                    ctx.lineWidth = 0.5;
+                    ctx.stroke();
+                }
+            }
+        }
+    }
+    
+    // Draw lines to mouse
+    function drawMouseLines() {
+        if (mouse.x === null) return;
+        for (let i = 0; i < nodes.length; i++) {
+            const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
+            if (dist < maxDist) {
+                ctx.beginPath();
+                ctx.moveTo(nodes[i].x, nodes[i].y);
+                ctx.lineTo(mouse.x, mouse.y);
+                ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+            }
+        }
+    }
+
+    // Animation loop
+    function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        nodes.forEach(node => {
+            node.update();
+            node.draw();
+        });
+        drawLines();
+        drawMouseLines();
+        requestAnimationFrame(animate);
+    }
+
+    // Event listeners
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+    });
+    window.addEventListener('mousemove', (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+    });
+    window.addEventListener('mouseout', () => {
+        mouse.x = null;
+        mouse.y = null;
+    });
+
+    init();
+    animate();
+</script>
+  </body>
+</html>

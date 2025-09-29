@@ -1,0 +1,14 @@
+services:
+  db:
+    image: mysql
+    container_name: mysql-api-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: micontraseñasecreta
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+volumes:
+  mysql_data:

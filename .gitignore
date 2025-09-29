@@ -1,0 +1,42 @@
+# Archivos y carpetas comunes a ignorar en proyectos PHP y Docker
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Configuración de IDEs
+.vscode/
+.idea/
+*.code-workspace
+
+# Archivos de Composer
+/vendor/
+composer.lock
+docker-composer.json
+
+# Archivos de entorno
+.env
+.env.*
+
+# Archivos de logs
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Archivos de Docker
+mysql-data/
+docker-compose.override.yml
+
+# Archivos de PowerShell
+*.ps1~
+
+# Otros
+node_modules/
+npm-debug.log
+.gemini/
+GEMINI.md
