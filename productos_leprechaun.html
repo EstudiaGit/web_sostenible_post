@@ -204,7 +204,7 @@
         color: rgba(157, 255, 120, 0.65);
       }
 
-      /* --- MOBILE: carrusel táctil con una imagen --- */
+      /* --- MOBILE: carrusel táctil con overlay --- */
       .carousel {
         position: relative;
       }
@@ -237,16 +237,13 @@
       .product-card {
         flex: 0 0 100%;
         max-width: 100%;
-        padding: 0;
-        border: none;
-        background: transparent;
         position: relative;
+        border: none;
+        padding: 0;
+        background: transparent;
         scroll-snap-align: start;
         scroll-snap-stop: always;
-      }
-
-      .product-card::after {
-        display: none;
+        overflow: hidden;
       }
 
       .product-card img {
@@ -255,9 +252,39 @@
         height: auto;
       }
 
-      .product-card h3,
+      .product-info {
+        position: absolute;
+        inset-inline: 0;
+        bottom: 0;
+        padding: clamp(14px, 5vw, 22px) clamp(16px, 6vw, 26px);
+        background: linear-gradient(
+          180deg,
+          rgba(3, 10, 4, 0) 0%,
+          rgba(3, 10, 4, 0.78) 40%,
+          rgba(3, 10, 4, 0.92) 100%
+        );
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .product-card h3 {
+        margin: 0;
+        font-size: clamp(0.86rem, 4vw, 1rem);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        line-height: 1.35;
+        text-align: left;
+        color: var(--text-primary);
+      }
+
       .product-card p {
-        display: none;
+        margin: 0;
+        font-size: clamp(0.92rem, 4.2vw, 1.05rem);
+        font-weight: 600;
+        color: var(--accent-strong);
+        text-align: left;
+        letter-spacing: 1px;
       }
 
       /* --- TABLET / DESKTOP --- */
@@ -331,11 +358,12 @@
           background: rgba(4, 12, 4, 0.95);
           scroll-snap-align: unset;
           scroll-snap-stop: normal;
+          position: relative;
+          overflow: visible;
           animation: fadeIn 0.25s ease both;
         }
 
         .product-card::after {
-          display: block;
           content: "";
           position: absolute;
           inset: 6px;
@@ -362,30 +390,21 @@
           background: #fff;
         }
 
-        .product-card h3,
-        .product-card p {
-          display: block;
+        .product-info {
+          position: static;
+          background: none;
+          padding: 12px 0 0;
+          align-items: center;
+          gap: 10px;
         }
 
         .product-card h3 {
-          margin: 0;
-          font-size: 0.85rem;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          line-height: 1.4;
+          text-align: center;
           min-height: 3rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--text-primary);
         }
 
         .product-card p {
-          margin: 0;
-          font-size: 1rem;
-          font-weight: 600;
-          color: var(--accent-strong);
-          letter-spacing: 1px;
+          text-align: center;
         }
       }
 
@@ -451,40 +470,52 @@
                       src="https://www.leprechaun.es/47987-home_default/frigth-zone-playset-masters-of-the-universe-origins.jpg"
                       alt="Fright Zone Playset Masters Of The Universe Origins"
                     />
-                    <h3>Fright Zone Playset Masters Of The Universe Origins</h3>
-                    <p>101,58&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>
+                        Fright Zone Playset Masters Of The Universe Origins
+                      </h3>
+                      <p>101,58&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
                       alt="Rom 02 La Etapa Marvel Original"
                     />
-                    <h3>Rom 02. La Etapa Marvel Original</h3>
-                    <p>71,25&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Rom 02. La Etapa Marvel Original</h3>
+                      <p>71,25&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/47981-home_default/rom-01-la-etapa-marvel-original.jpg"
                       alt="Rom 01 La Etapa Marvel Original"
                     />
-                    <h3>Rom 01. La Etapa Marvel Original</h3>
-                    <p>76,00&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Rom 01. La Etapa Marvel Original</h3>
+                      <p>76,00&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/47977-home_default/bohemian-rhapsody-blu-ray-4k-ultra-hd.jpg"
                       alt="Bohemian Rhapsody Blu-Ray 4K Ultra HD"
                     />
-                    <h3>Bohemian Rhapsody Blu-Ray 4K Ultra HD</h3>
-                    <p>16,96&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Bohemian Rhapsody Blu-Ray 4K Ultra HD</h3>
+                      <p>16,96&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/47975-home_default/rambo-acorralado-blu-ray-4k-ultra-hd.jpg"
                       alt="Rambo Acorralado Blu-Ray 4K Ultra HD"
                     />
-                    <h3>Rambo: Acorralado Blu-Ray 4K Ultra HD</h3>
-                    <p>16,96&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Rambo: Acorralado Blu-Ray 4K Ultra HD</h3>
+                      <p>16,96&nbsp;€</p>
+                    </div>
                   </article>
                 </div>
               </div>
@@ -519,49 +550,61 @@
                       src="https://www.leprechaun.es/3475-home_default/figura-18-cm-police-disguise-t-1000-terminator-genysis.jpg"
                       alt="Figura 18 cm Police Disguise T-1000 Terminator Genysis"
                     />
-                    <h3>
-                      Figura 18 cm Police Disguise T-1000 Terminator Genysis
-                    </h3>
-                    <p>33,58&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>
+                        Figura 18 cm Police Disguise T-1000 Terminator Genysis
+                      </h3>
+                      <p>33,58&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/2019-home_default/figura-scout-trooper-star-wars-black-series-archive-15-cm.jpg"
                       alt="Figura Scout Trooper Star Wars Black Series Archive 15 cm"
                     />
-                    <h3>
-                      Figura Scout Trooper Star Wars Black Series Archive 15 Cm
-                    </h3>
-                    <p>25,08&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>
+                        Figura Scout Trooper Star Wars Black Series Archive 15
+                        Cm
+                      </h3>
+                      <p>25,08&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/17839-home_default/figura-spider-man-2099-15-cm-marvel-legends-vintage-f0230.jpg"
                       alt="Figura Spider-Man 2099 15 cm Marvel Legends Vintage"
                     />
-                    <h3>
-                      Figura Spider-Man 2099 15 Cm Marvel Legends Vintage
-                      (F0230)
-                    </h3>
-                    <p>42,08&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>
+                        Figura Spider-Man 2099 15 Cm Marvel Legends Vintage
+                        (F0230)
+                      </h3>
+                      <p>42,08&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/2965-home_default/vehiculo-star-wars-resistance-a-wing-fighter-c1249c1248-force-link.jpg"
                       alt="Vehículo Star Wars Resistance A-Wing Fighter"
                     />
-                    <h3>
-                      Vehículo Star Wars Resistance A-Wing Fighter (Force Link)
-                    </h3>
-                    <p>27,65&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>
+                        Vehículo Star Wars Resistance A-Wing Fighter (Force
+                        Link)
+                      </h3>
+                      <p>27,65&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/12575-home_default/figura-dr-doom-15-cm-marvel-legends-f2796-baf-xemnu.jpg"
                       alt="Figura Dr. Doom 15 cm Marvel Legends"
                     />
-                    <h3>Figura Dr. Doom 15 Cm Marvel Legends (BAF: Xemnu)</h3>
-                    <p>25,08&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Figura Dr. Doom 15 Cm Marvel Legends (BAF: Xemnu)</h3>
+                      <p>25,08&nbsp;€</p>
+                    </div>
                   </article>
                 </div>
               </div>
@@ -596,40 +639,50 @@
                       src="https://www.leprechaun.es/47387-home_default/blue-lock-27.jpg"
                       alt="Blue Lock 27"
                     />
-                    <h3>Blue Lock 27</h3>
-                    <p>8,08&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Blue Lock 27</h3>
+                      <p>8,08&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/30049-home_default/komi-san-no-puede-comunicarse-1.jpg"
                       alt="Komi San No Puede Comunicarse 1"
                     />
-                    <h3>Komi San No Puede Comunicarse 1</h3>
-                    <p>12,83&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Komi San No Puede Comunicarse 1</h3>
+                      <p>12,83&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/47067-home_default/solo-leveling-8.jpg"
                       alt="Solo Leveling 8"
                     />
-                    <h3>Solo Leveling 8</h3>
-                    <p>13,78&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Solo Leveling 8</h3>
+                      <p>13,78&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
                       alt="Rom 02 La Etapa Marvel Original"
                     />
-                    <h3>Rom 02. La Etapa Marvel Original</h3>
-                    <p>71,25&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Rom 02. La Etapa Marvel Original</h3>
+                      <p>71,25&nbsp;€</p>
+                    </div>
                   </article>
                   <article class="product-card">
                     <img
                       src="https://www.leprechaun.es/38983-home_default/unleash.jpg"
                       alt="Unleash"
                     />
-                    <h3>Unleash</h3>
-                    <p>19,00&nbsp;€</p>
+                    <div class="product-info">
+                      <h3>Unleash</h3>
+                      <p>19,00&nbsp;€</p>
+                    </div>
                   </article>
                 </div>
               </div>
