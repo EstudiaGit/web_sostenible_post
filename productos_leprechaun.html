@@ -4,180 +4,335 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Productos de Leprechaun - Mi Blog CRT</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
       :root {
         color-scheme: dark;
         --bg-main: #040404;
-        --bg-panel: rgba(5, 14, 5, 0.95);
-        --grid-color: rgba(10, 32, 10, 0.45);
-        --text-primary: #8fff7a;
-        --text-secondary: #54c461;
-        --text-dim: #2f7036;
+        --bg-panel: rgba(5, 14, 5, 0.94);
+        --grid-soft: rgba(20, 70, 28, 0.35);
+        --text-primary: #9eff84;
+        --text-secondary: #68e36f;
         --accent: #9dff78;
-        --accent-strong: #4aff3a;
-        --error: #ff3b3b;
-        --warning: #f0e161;
-        --success: #85ff5f;
-        --border-thick: 1px;
-        --shadow-hard: 10px 10px 0 rgba(0, 0, 0, 0.7);
+        --accent-strong: #54ff42;
+        --border: 1px solid rgba(157, 255, 120, 0.7);
+        --shadow-hard: 14px 14px 0 rgba(0, 0, 0, 0.7);
+        --card-gap: clamp(16px, 2vw, 24px);
+        font-family: "Share Tech Mono", "IBM Plex Mono", monospace;
       }
 
-      @keyframes reveal {
-        from {
-          clip-path: inset(50% 100% 50% 0);
-          opacity: 0;
-        }
-        to {
-          clip-path: inset(0 0 0 0);
-          opacity: 1;
-        }
-      }
       * {
         box-sizing: border-box;
       }
+
       body {
         margin: 0;
         min-height: 100vh;
-        background: var(--bg-main);
+        background: radial-gradient(
+            circle at 12% 18%,
+            rgba(90, 255, 120, 0.16),
+            transparent 55%
+          ),
+          radial-gradient(
+            circle at 85% 72%,
+            rgba(90, 255, 120, 0.18),
+            transparent 52%
+          ),
+          var(--bg-main);
         color: var(--text-primary);
-        font-family: "Share Tech Mono", "IBM Plex Mono", "VT323", monospace;
-        padding: 48px 6vw 64px;
+        padding: clamp(32px, 6vw, 72px);
         position: relative;
         overflow-x: hidden;
       }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(120, 255, 150, 0.08) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(120, 255, 150, 0.08) 1px, transparent 1px);
+        background-size: 120px 120px;
+        opacity: 0.55;
+        pointer-events: none;
+        z-index: -2;
+      }
+
       #node-canvas {
         position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        inset: 0;
         z-index: -1;
       }
+
       .container {
-        max-width: 1100px;
+        max-width: 1180px;
         margin: 0 auto;
-        border: var(--border-thick) solid var(--accent);
-        padding: 32px clamp(16px, 5vw, 48px);
         background: var(--bg-panel);
+        border: var(--border);
+        padding: clamp(24px, 5vw, 48px);
         box-shadow: var(--shadow-hard);
         position: relative;
-        z-index: 1;
       }
+
+      .container::after {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        border: 1px dashed rgba(120, 255, 150, 0.28);
+        pointer-events: none;
+      }
+
       header {
-        padding: 32px clamp(16px, 6vw, 64px);
-        border: var(--border-thick) solid var(--accent-strong);
-        background: rgba(0, 8, 0, 0.9);
+        padding: clamp(24px, 6vw, 56px);
+        border: var(--border);
+        border-color: var(--accent-strong);
+        background: rgba(1, 9, 3, 0.9);
+        margin-bottom: clamp(28px, 5vw, 48px);
         position: relative;
         overflow: hidden;
-        margin-bottom: 36px;
       }
+
       header::before {
         content: "[STATUS: LINKED]";
         position: absolute;
         top: 18px;
-        right: 22px;
+        right: clamp(16px, 4vw, 32px);
         font-size: 0.9rem;
-        color: var(--text-secondary);
         letter-spacing: 4px;
+        color: var(--text-secondary);
       }
+
+      header::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          120deg,
+          transparent 40%,
+          rgba(157, 255, 120, 0.08),
+          transparent 60%
+        );
+        mix-blend-mode: screen;
+      }
+
       header h1 {
-        margin: 0;
-        font-size: clamp(1.8rem, 4vw, 3rem);
+        margin: 0 0 18px;
+        font-size: clamp(1.9rem, 4.6vw, 3.1rem);
         text-transform: uppercase;
-        letter-spacing: 5px;
-        border-bottom: var(--border-thick) solid var(--accent);
+        letter-spacing: 6px;
         padding-bottom: 14px;
-        margin-bottom: 18px;
+        border-bottom: var(--border);
       }
+
       header p {
         margin: 0;
-        font-size: clamp(0.9rem, 2vw, 1.15rem);
+        max-width: 660px;
+        font-size: clamp(0.95rem, 2.2vw, 1.18rem);
         color: var(--text-secondary);
         line-height: 1.6;
-        max-width: 680px;
       }
-      main {
-        display: grid;
-        gap: 36px;
-      }
-      section {
-        border: var(--border-thick) solid var(--accent);
-        padding: 28px clamp(18px, 4vw, 40px);
-        background: rgba(0, 9, 1, 0.88);
-        position: relative;
-      }
-      section::before {
-        content: attr(data-label);
-        position: absolute;
-        top: -18px;
-        left: 22px;
-        background: var(--bg-main);
-        padding: 4px 14px;
-        border: var(--border-thick) solid var(--accent-strong);
-        text-transform: uppercase;
-        letter-spacing: 4px;
-        font-size: 0.75rem;
-      }
-      section h2 {
-        margin: 0 0 20px;
-        font-size: 1.4rem;
-        text-transform: uppercase;
-        letter-spacing: 5px;
-      }
+
       .nav-link {
         display: inline-block;
-        margin-top: 16px;
+        margin-top: clamp(18px, 3vw, 24px);
         color: var(--accent);
         text-decoration: none;
-        border: 1px solid var(--accent);
-        padding: 8px 16px;
+        border: var(--border);
+        padding: 10px 20px;
         text-transform: uppercase;
         letter-spacing: 3px;
         transition: all 0.3s ease;
       }
+
       .nav-link:hover {
         background: var(--accent);
-        color: var(--bg-main);
-        box-shadow: 0 0 12px rgba(157, 255, 120, 0.4);
+        color: #021402;
+        box-shadow: 0 0 16px rgba(157, 255, 120, 0.45);
       }
-      .product-grid {
+
+      main {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
+        gap: clamp(28px, 5vw, 44px);
       }
+
+      .section-wrapper {
+        position: relative;
+      }
+
+      .section-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: -14px;
+        border: 1px dashed rgba(90, 200, 110, 0.22);
+        pointer-events: none;
+      }
+
+      .section-title {
+        position: absolute;
+        top: -20px;
+        left: clamp(14px, 4vw, 36px);
+        background: #000c03;
+        padding: 6px 18px;
+        border: var(--border);
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        font-size: 0.86rem;
+        z-index: 2;
+      }
+
+      .section-box {
+        border: var(--border);
+        padding: clamp(22px, 4vw, 38px);
+        background: rgba(0, 10, 2, 0.92);
+        position: relative;
+      }
+
+      .carousel {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: clamp(12px, 2vw, 18px);
+      }
+
+      .carousel-viewport {
+        overflow: hidden;
+        flex: 1;
+      }
+
+      .product-grid {
+        display: flex;
+        gap: var(--card-gap);
+        transition: transform 0.45s ease;
+        will-change: transform;
+      }
+
       .product-card {
+        flex: 0 0 clamp(210px, 23vw, 240px);
         border: 1px solid rgba(157, 255, 120, 0.38);
-        padding: 16px;
+        background: rgba(4, 12, 4, 0.95);
+        padding: 18px;
         text-align: center;
-        background: rgba(5, 15, 6, 0.96);
-        animation: reveal 0.6s ease forwards;
         display: flex;
         flex-direction: column;
-        justify-content: space-between;
+        gap: 12px;
+        position: relative;
+        animation: fadeIn 0.35s ease both;
       }
+
+      .product-card::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border: 1px dashed rgba(157, 255, 120, 0.16);
+        pointer-events: none;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
       .product-card img {
-        max-width: 100%;
+        width: 100%;
         height: auto;
-        margin-bottom: 12px;
         border: 1px solid rgba(157, 255, 120, 0.38);
+        background: #fff;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
       }
+
       .product-card h3 {
-        margin: 0 0 8px;
+        margin: 0;
         font-size: 0.9rem;
         letter-spacing: 1px;
         text-transform: uppercase;
         color: var(--text-primary);
+        min-height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1.4;
       }
+
       .product-card p {
         margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
         color: var(--accent-strong);
-        font-size: 1.1rem;
-        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      .carousel-btn {
+        width: 42px;
+        height: 42px;
+        border: var(--border);
+        background: rgba(157, 255, 120, 0.18);
+        color: var(--accent);
+        font-size: 1.6rem;
+        cursor: pointer;
+        display: grid;
+        place-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .carousel-btn:hover:not(:disabled) {
+        background: var(--accent);
+        color: #021402;
+        box-shadow: 0 0 14px rgba(157, 255, 120, 0.55);
+      }
+
+      .carousel-btn:disabled {
+        opacity: 0.25;
+        cursor: not-allowed;
+      }
+
+      @media (max-width: 680px) {
+        body {
+          padding: clamp(24px, 6vw, 32px);
+        }
+        .container::after {
+          inset: 8px;
+        }
+        .carousel-btn {
+          width: 38px;
+          height: 38px;
+        }
+        .product-card {
+          flex-basis: clamp(220px, 78vw, 280px);
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+          scroll-behavior: auto !important;
+        }
       }
     </style>
   </head>
+
   <body>
-    <canvas id="node-canvas"></canvas>
+    <canvas id="node-canvas" aria-hidden="true"></canvas>
+
     <div class="container">
       <header>
         <h1>Productos Leprechaun.es</h1>
@@ -185,261 +340,407 @@
           Listado de productos extraídos de la web de Leprechaun.es el
           29/09/2025.
         </p>
-        <a href="index.html" class="nav-link">[ Volver a S.Y.N.T.H. BLOG ]</a>
+        <a href="index.html" class="nav-link">[ VOLVER A S.Y.N.T.H. BLOG ]</a>
       </header>
+
       <main>
-        <section data-label="Nuevos Productos">
-          <h2>Nuevos Productos</h2>
-          <div class="product-grid">
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47987-home_default/frigth-zone-playset-masters-of-the-universe-origins.jpg"
-                alt="Frigth Zone PLayset Masters Of The Universe Origins"
-              />
-              <h3>Frigth Zone PLayset Masters Of The Universe Origins</h3>
-              <p>101,58&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
-                alt="Rom 02. La Etapa Marvel Original"
-              />
-              <h3>Rom 02. La Etapa Marvel Original</h3>
-              <p>71,25&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47981-home_default/rom-01-la-etapa-marvel-original.jpg"
-                alt="Rom 01. La Etapa Marvel Original"
-              />
-              <h3>Rom 01. La Etapa Marvel Original</h3>
-              <p>76,00&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47977-home_default/bohemian-rhapsody-blu-ray-4k-ultra-hd.jpg"
-                alt="Bohemian Rhapsody Blu-Ray 4K Ultra HD"
-              />
-              <h3>Bohemian Rhapsody Blu-Ray 4K Ultra HD</h3>
-              <p>16,96&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47975-home_default/rambo-acorralado-blu-ray-4k-ultra-hd.jpg"
-                alt="Rambo: Acorralado Blu-Ray 4K Ultra HD"
-              />
-              <h3>Rambo: Acorralado Blu-Ray 4K Ultra HD</h3>
-              <p>16,96&nbsp;€</p>
-            </div>
-          </div>
-        </section>
-        <section data-label="Los más vendidos">
-          <h2>Los más vendidos</h2>
-          <div class="product-grid">
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/3475-home_default/figura-18-cm-police-disguise-t-1000-terminator-genysis.jpg"
-                alt="FIGURA 18 CM POLICE DISGUISE T-1000 TERMINATOR GENYSIS"
-              />
-              <h3>FIGURA 18 CM POLICE DISGUISE T-1000 TERMINATOR GENYSIS</h3>
-              <p>33,58&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/2019-home_default/figura-scout-trooper-star-wars-black-series-archive-15-cm.jpg"
-                alt="Figura Scout Trooper Star Wars Black Series Archive 15 Cm"
-              />
-              <h3>Figura Scout Trooper Star Wars Black Series Archive 15 Cm</h3>
-              <p>25,08&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/17839-home_default/figura-spider-man-2099-15-cm-marvel-legends-vintage-f0230.jpg"
-                alt="Figura Spider-Man 2099 15 Cm Marvel Legends Vintage (F0230)"
-              />
-              <h3>
-                Figura Spider-Man 2099 15 Cm Marvel Legends Vintage (F0230)
-              </h3>
-              <p>42,08&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/2965-home_default/vehiculo-star-wars-resistance-a-wing-fighter-c1249c1248-force-link.jpg"
-                alt="VEHÍCULO STAR WARS RESISTANCE A-WING FIGHTER (C1249/C1248) (FORCE LINK)"
-              />
-              <h3>
-                VEHÍCULO STAR WARS RESISTANCE A-WING FIGHTER (C1249/C1248)
-                (FORCE LINK)
-              </h3>
-              <p>27,65&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/12575-home_default/figura-dr-doom-15-cm-marvel-legends-f2796-baf-xemnu.jpg"
-                alt="Figura Dr. Doom 15 Cm Marvel Legends (F2796) (BAF: Xemnu)"
-              />
-              <h3>Figura Dr. Doom 15 Cm Marvel Legends (F2796) (BAF: Xemnu)</h3>
-              <p>25,08&nbsp;€</p>
+        <section class="section-wrapper">
+          <div class="section-title">[ NUEVOS PRODUCTOS ]</div>
+          <div class="section-box">
+            <div class="carousel" data-carousel="nuevos">
+              <button
+                class="carousel-btn prev"
+                data-carousel-btn="prev"
+                aria-label="Anterior"
+              >
+                ‹
+              </button>
+              <div class="carousel-viewport">
+                <div class="product-grid" data-carousel-track="nuevos">
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47987-home_default/frigth-zone-playset-masters-of-the-universe-origins.jpg"
+                      alt="Fright Zone Masters of the Universe Origins"
+                    />
+                    <h3>Fright Zone Playset Masters Of The Universe Origins</h3>
+                    <p>101,58&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
+                      alt="Rom 02 La Etapa Marvel Original"
+                    />
+                    <h3>Rom 02. La Etapa Marvel Original</h3>
+                    <p>71,25&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47981-home_default/rom-01-la-etapa-marvel-original.jpg"
+                      alt="Rom 01 La Etapa Marvel Original"
+                    />
+                    <h3>Rom 01. La Etapa Marvel Original</h3>
+                    <p>76,00&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47977-home_default/bohemian-rhapsody-blu-ray-4k-ultra-hd.jpg"
+                      alt="Bohemian Rhapsody Blu-Ray 4K Ultra HD"
+                    />
+                    <h3>Bohemian Rhapsody Blu-Ray 4K Ultra HD</h3>
+                    <p>16,96&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47975-home_default/rambo-acorralado-blu-ray-4k-ultra-hd.jpg"
+                      alt="Rambo Acorralado Blu-Ray 4K Ultra HD"
+                    />
+                    <h3>Rambo: Acorralado Blu-Ray 4K Ultra HD</h3>
+                    <p>16,96&nbsp;€</p>
+                  </article>
+                </div>
+              </div>
+              <button
+                class="carousel-btn next"
+                data-carousel-btn="next"
+                aria-label="Siguiente"
+              >
+                ›
+              </button>
             </div>
           </div>
         </section>
-        <section data-label="Cómics">
-          <h2>Cómics</h2>
-          <div class="product-grid">
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47387-home_default/blue-lock-27.jpg"
-                alt="Blue Lock 27"
-              />
-              <h3>Blue Lock 27</h3>
-              <p>8,08&nbsp;€</p>
+
+        <section class="section-wrapper">
+          <div class="section-title">[ LOS MÁS VENDIDOS ]</div>
+          <div class="section-box">
+            <div class="carousel" data-carousel="vendidos">
+              <button
+                class="carousel-btn prev"
+                data-carousel-btn="prev"
+                aria-label="Anterior"
+              >
+                ‹
+              </button>
+              <div class="carousel-viewport">
+                <div class="product-grid" data-carousel-track="vendidos">
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/3475-home_default/figura-18-cm-police-disguise-t-1000-terminator-genysis.jpg"
+                      alt="Figura 18 cm Police Disguise T-1000"
+                    />
+                    <h3>
+                      Figura 18 cm Police Disguise T-1000 Terminator Genysis
+                    </h3>
+                    <p>33,58&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/2019-home_default/figura-scout-trooper-star-wars-black-series-archive-15-cm.jpg"
+                      alt="Scout Trooper Black Series Archive 15 cm"
+                    />
+                    <h3>
+                      Figura Scout Trooper Star Wars Black Series Archive 15 Cm
+                    </h3>
+                    <p>25,08&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/17839-home_default/figura-spider-man-2099-15-cm-marvel-legends-vintage-f0230.jpg"
+                      alt="Spider-Man 2099 Marvel Legends Vintage"
+                    />
+                    <h3>
+                      Figura Spider-Man 2099 15 Cm Marvel Legends Vintage
+                      (F0230)
+                    </h3>
+                    <p>42,08&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/2965-home_default/vehiculo-star-wars-resistance-a-wing-fighter-c1249c1248-force-link.jpg"
+                      alt="Star Wars Resistance A-Wing Fighter"
+                    />
+                    <h3>
+                      Vehículo Star Wars Resistance A-Wing Fighter (Force Link)
+                    </h3>
+                    <p>27,65&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/12575-home_default/figura-dr-doom-15-cm-marvel-legends-f2796-baf-xemnu.jpg"
+                      alt="Figura Dr. Doom Marvel Legends"
+                    />
+                    <h3>Figura Dr. Doom 15 Cm Marvel Legends (BAF: Xemnu)</h3>
+                    <p>25,08&nbsp;€</p>
+                  </article>
+                </div>
+              </div>
+              <button
+                class="carousel-btn next"
+                data-carousel-btn="next"
+                aria-label="Siguiente"
+              >
+                ›
+              </button>
             </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/30049-home_default/komi-san-no-puede-comunicarse-1.jpg"
-                alt="Komi San No Puede Comunicarse 1"
-              />
-              <h3>Komi San No Puede Comunicarse 1</h3>
-              <p>12,83&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47067-home_default/solo-leveling-8.jpg"
-                alt="Solo Leveling 8"
-              />
-              <h3>Solo Leveling 8</h3>
-              <p>13,78&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
-                alt="Rom 02. La Etapa Marvel Original"
-              />
-              <h3>Rom 02. La Etapa Marvel Original</h3>
-              <p>71,25&nbsp;€</p>
-            </div>
-            <div class="product-card">
-              <img
-                src="https://www.leprechaun.es/38983-home_default/unleash.jpg"
-                alt="Unleash"
-              />
-              <h3>Unleash</h3>
-              <p>19,00&nbsp;€</p>
+          </div>
+        </section>
+
+        <section class="section-wrapper">
+          <div class="section-title">[ CÓMICS ]</div>
+          <div class="section-box">
+            <div class="carousel" data-carousel="comics">
+              <button
+                class="carousel-btn prev"
+                data-carousel-btn="prev"
+                aria-label="Anterior"
+              >
+                ‹
+              </button>
+              <div class="carousel-viewport">
+                <div class="product-grid" data-carousel-track="comics">
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47387-home_default/blue-lock-27.jpg"
+                      alt="Blue Lock 27"
+                    />
+                    <h3>Blue Lock 27</h3>
+                    <p>8,08&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/30049-home_default/komi-san-no-puede-comunicarse-1.jpg"
+                      alt="Komi San No Puede Comunicarse 1"
+                    />
+                    <h3>Komi San No Puede Comunicarse 1</h3>
+                    <p>12,83&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47067-home_default/solo-leveling-8.jpg"
+                      alt="Solo Leveling 8"
+                    />
+                    <h3>Solo Leveling 8</h3>
+                    <p>13,78&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/47983-home_default/rom-02-la-etapa-marvel-original.jpg"
+                      alt="Rom 02 La Etapa Marvel Original"
+                    />
+                    <h3>Rom 02. La Etapa Marvel Original</h3>
+                    <p>71,25&nbsp;€</p>
+                  </article>
+                  <article class="product-card">
+                    <img
+                      src="https://www.leprechaun.es/38983-home_default/unleash.jpg"
+                      alt="Unleash"
+                    />
+                    <h3>Unleash</h3>
+                    <p>19,00&nbsp;€</p>
+                  </article>
+                </div>
+              </div>
+              <button
+                class="carousel-btn next"
+                data-carousel-btn="next"
+                aria-label="Siguiente"
+              >
+                ›
+              </button>
             </div>
           </div>
         </section>
       </main>
     </div>
+
     <script>
-    const canvas = document.getElementById('node-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+      /* Fondo de nodos */
+      (function () {
+        const canvas = document.getElementById("node-canvas");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        let nodes = [];
+        const total = 55;
+        const maxDist = 180;
 
-    let nodes = [];
-    const numNodes = 50;
-    const maxDist = 200;
-    let mouse = { x: null, y: null };
+        function sizeCanvas() {
+          canvas.width = window.innerWidth;
+          canvas.height = window.innerHeight;
+        }
 
-    // Node class
-    class Node {
-        constructor(x, y, vx, vy) {
+        class Node {
+          constructor(x, y, vx, vy) {
             this.x = x;
             this.y = y;
             this.vx = vx;
             this.vy = vy;
-            this.radius = 2;
-        }
-
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(157, 255, 120, 0.5)';
-            ctx.fill();
-        }
-
-        update() {
-            if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-            if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+          }
+          update() {
+            if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
+            if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
             this.x += this.vx;
             this.y += this.vy;
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+            ctx.fillStyle = "rgba(157, 255, 120, 0.45)";
+            ctx.fill();
+          }
         }
-    }
 
-    // Create nodes
-    function init() {
-        nodes = [];
-        for (let i = 0; i < numNodes; i++) {
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height;
-            const vx = (Math.random() - 0.5) * 0.5;
-            const vy = (Math.random() - 0.5) * 0.5;
-            nodes.push(new Node(x, y, vx, vy));
+        function initNodes() {
+          nodes = Array.from({ length: total }, () => {
+            return new Node(
+              Math.random() * canvas.width,
+              Math.random() * canvas.height,
+              (Math.random() - 0.5) * 0.4,
+              (Math.random() - 0.5) * 0.4
+            );
+          });
         }
-    }
 
-    // Draw lines between nodes
-    function drawLines() {
-        for (let i = 0; i < nodes.length; i++) {
+        function drawConnections() {
+          for (let i = 0; i < nodes.length; i++) {
             for (let j = i + 1; j < nodes.length; j++) {
-                const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
-                if (dist < maxDist) {
-                    ctx.beginPath();
-                    ctx.moveTo(nodes[i].x, nodes[i].y);
-                    ctx.lineTo(nodes[j].x, nodes[j].y);
-                    ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-    
-    // Draw lines to mouse
-    function drawMouseLines() {
-        if (mouse.x === null) return;
-        for (let i = 0; i < nodes.length; i++) {
-            const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
-            if (dist < maxDist) {
+              const dist = Math.hypot(
+                nodes[i].x - nodes[j].x,
+                nodes[i].y - nodes[j].y
+              );
+              if (dist < maxDist) {
                 ctx.beginPath();
                 ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(mouse.x, mouse.y);
+                ctx.lineTo(nodes[j].x, nodes[j].y);
                 ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
-                ctx.lineWidth = 0.5;
+                ctx.lineWidth = 0.4;
                 ctx.stroke();
+              }
             }
+          }
         }
-    }
 
-    // Animation loop
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        nodes.forEach(node => {
+        function tick() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          nodes.forEach((node) => {
             node.update();
             node.draw();
+          });
+          drawConnections();
+          requestAnimationFrame(tick);
+        }
+
+        sizeCanvas();
+        initNodes();
+        tick();
+
+        let resizeTimer;
+        window.addEventListener("resize", () => {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(() => {
+            sizeCanvas();
+            initNodes();
+          }, 120);
         });
-        drawLines();
-        drawMouseLines();
-        requestAnimationFrame(animate);
-    }
+      })();
 
-    // Event listeners
-    window.addEventListener('resize', () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        init();
-    });
-    window.addEventListener('mousemove', (e) => {
-        mouse.x = e.x;
-        mouse.y = e.y;
-    });
-    window.addEventListener('mouseout', () => {
-        mouse.x = null;
-        mouse.y = null;
-    });
+      /* Carruseles */
+      class Carousel {
+        constructor(root) {
+          this.root = root;
+          this.id = root.dataset.carousel;
+          this.track = root.querySelector(`[data-carousel-track="${this.id}"]`);
+          this.viewport = root.querySelector(".carousel-viewport");
+          this.prevBtn = root.querySelector('[data-carousel-btn="prev"]');
+          this.nextBtn = root.querySelector('[data-carousel-btn="next"]');
+          this.cards = Array.from(this.track.children);
+          this.currentIndex = 0;
+          this.cardWidth = 0;
+          this.visibleCount = 1;
+          this.maxIndex = 0;
+          this.resizeTimer = null;
 
-    init();
-    animate();
-</script>
+          this.bindEvents();
+          this.refresh(false);
+          window.addEventListener("load", () => this.refresh(false));
+        }
+
+        bindEvents() {
+          this.prevBtn.addEventListener("click", () => this.prev());
+          this.nextBtn.addEventListener("click", () => this.next());
+
+          window.addEventListener("resize", () => {
+            clearTimeout(this.resizeTimer);
+            this.resizeTimer = setTimeout(() => this.refresh(false), 120);
+          });
+        }
+
+        refresh(animate) {
+          if (!this.cards.length) return;
+
+          const styles = getComputedStyle(this.track);
+          const gap = parseFloat(styles.columnGap || styles.gap || 20);
+          const card = this.cards[0];
+          this.cardWidth = card.getBoundingClientRect().width + gap;
+          const viewportWidth = this.viewport.getBoundingClientRect().width;
+          this.visibleCount = Math.max(
+            1,
+            Math.floor((viewportWidth + gap) / this.cardWidth)
+          );
+          this.maxIndex = Math.max(0, this.cards.length - this.visibleCount);
+
+          if (this.cards.length <= this.visibleCount) {
+            this.prevBtn.hidden = true;
+            this.nextBtn.hidden = true;
+            this.track.style.transition = "none";
+            this.track.style.transform = "translateX(0)";
+            this.currentIndex = 0;
+            return;
+          }
+
+          this.prevBtn.hidden = false;
+          this.nextBtn.hidden = false;
+
+          if (this.currentIndex > this.maxIndex) {
+            this.currentIndex = this.maxIndex;
+          }
+
+          this.applyTransform(animate);
+          this.updateButtons();
+        }
+
+        applyTransform(animate) {
+          this.track.style.transition = animate
+            ? "transform 0.45s ease"
+            : "none";
+          const offset = this.currentIndex * this.cardWidth;
+          this.track.style.transform = `translateX(-${offset}px)`;
+        }
+
+        updateButtons() {
+          this.prevBtn.disabled = this.currentIndex === 0;
+          this.nextBtn.disabled = this.currentIndex === this.maxIndex;
+        }
+
+        next() {
+          if (this.currentIndex >= this.maxIndex) return;
+          this.currentIndex += 1;
+          this.applyTransform(true);
+          this.updateButtons();
+        }
+
+        prev() {
+          if (this.currentIndex <= 0) return;
+          this.currentIndex -= 1;
+          this.applyTransform(true);
+          this.updateButtons();
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        document
+          .querySelectorAll("[data-carousel]")
+          .forEach((carouselRoot) => new Carousel(carouselRoot));
+      });
+    </script>
   </body>
 </html>
