@@ -557,7 +557,7 @@
   <body>
     <canvas id="node-canvas"></canvas>
 
-    <div id="modal-overlay" class="modal-overlay" style="display: none;">
+    <div id="modal-overlay" class="modal-overlay" style="display: none">
       <div id="modal" class="modal">
         <h2 id="modal-title"></h2>
         <div id="modal-content"></div>
@@ -579,7 +579,9 @@
           flujo de datos de un monitor fosforescente clásico, ideal para pruebas
           de integración.
         </p>
-        <a href="productos_leprechaun.html" class="nav-link">[ Acceder a Listado de Productos ]</a>
+        <a href="productos_leprechaun.html" class="nav-link"
+          >[ Acceder a Listado de Productos ]</a
+        >
       </header>
 
       <main>
@@ -748,11 +750,9 @@
             throw new Error(`Error ${response.status}: ${response.statusText}`);
           }
           const post = await response.json();
-          showModal(
-            post.title,
-            `<p>${escapeHtml(post.content)}</p>`,
-            [{ label: 'Cerrar', className: 'button' }]
-          );
+          showModal(post.title, `<p>${escapeHtml(post.content)}</p>`, [
+            { label: "Cerrar", className: "button" },
+          ]);
         } catch (error) {
           console.error("Error al obtener el post:", error);
           showToast("No se pudo obtener el post.", "error");
@@ -761,44 +761,51 @@
 
       async function deletePost(postId) {
         showModal(
-          'Confirmar Eliminación',
-          '<p>¿Estás seguro de que quieres eliminar este post? Esta acción no se puede deshacer.</p>',
+          "Confirmar Eliminación",
+          "<p>¿Estás seguro de que quieres eliminar este post? Esta acción no se puede deshacer.</p>",
           [
             {
-              label: 'Cancelar',
-              className: 'button',
+              label: "Cancelar",
+              className: "button",
             },
             {
-              label: 'Eliminar',
-              className: 'button delete-post',
+              label: "Eliminar",
+              className: "button delete-post",
               callback: async () => {
                 try {
                   const response = await fetch(API_URL, {
-                    method: 'DELETE',
+                    method: "DELETE",
                     headers: {
-                      'Content-Type': 'application/json',
-                      'Authorization': API_KEY,
+                      "Content-Type": "application/json",
+                      Authorization: API_KEY,
                     },
                     body: JSON.stringify({ id: postId }),
                   });
 
                   if (!response.ok) {
                     const errorBody = await safeJson(response);
-                    const message = (errorBody && errorBody.message) || `Error ${response.status} al eliminar el post.`;
+                    const message =
+                      (errorBody && errorBody.message) ||
+                      `Error ${response.status} al eliminar el post.`;
                     throw new Error(message);
                   }
 
-                  showToast('Post eliminado exitosamente.', 'success');
-                  const postElement = document.querySelector(`.post[data-id='${postId}']`);
+                  showToast("Post eliminado exitosamente.", "success");
+                  const postElement = document.querySelector(
+                    `.post[data-id='${postId}']`
+                  );
                   if (postElement) {
                     postElement.remove();
                   }
                 } catch (error) {
-                  console.error('Error al eliminar el post:', error);
-                  showToast(error.message || 'No se pudo eliminar el post.', 'error');
+                  console.error("Error al eliminar el post:", error);
+                  showToast(
+                    error.message || "No se pudo eliminar el post.",
+                    "error"
+                  );
                 }
-              }
-            }
+              },
+            },
           ]
         );
       }
@@ -849,7 +856,9 @@
                 </div>
                 <div class="post-actions">
                     <button class="view-post" data-id="${post.id}">View</button>
-                    <button class="delete-post" data-id="${post.id}">[X]</button>
+                    <button class="delete-post" data-id="${
+                      post.id
+                    }">[X]</button>
                 </div>
             </footer>
         `;
@@ -892,21 +901,21 @@
       }
 
       function showModal(title, content, actions = []) {
-        const modalOverlay = document.getElementById('modal-overlay');
-        const modalTitle = document.getElementById('modal-title');
-        const modalContent = document.getElementById('modal-content');
-        const modalActions = document.getElementById('modal-actions');
+        const modalOverlay = document.getElementById("modal-overlay");
+        const modalTitle = document.getElementById("modal-title");
+        const modalContent = document.getElementById("modal-content");
+        const modalActions = document.getElementById("modal-actions");
 
         modalTitle.textContent = title;
         modalContent.innerHTML = content;
-        modalActions.innerHTML = '';
+        modalActions.innerHTML = "";
 
-        actions.forEach(action => {
-          const button = document.createElement('button');
+        actions.forEach((action) => {
+          const button = document.createElement("button");
           button.textContent = action.label;
-          button.className = action.className || 'button';
-          button.addEventListener('click', () => {
-            modalOverlay.style.display = 'none';
+          button.className = action.className || "button";
+          button.addEventListener("click", () => {
+            modalOverlay.style.display = "none";
             if (action.callback) {
               action.callback();
             }
@@ -914,7 +923,7 @@
           modalActions.appendChild(button);
         });
 
-        modalOverlay.style.display = 'flex';
+        modalOverlay.style.display = "flex";
       }
 
       function escapeHtml(value) {
@@ -951,115 +960,118 @@
       }
     </script>
     <script>
-    const canvas = document.getElementById('node-canvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+      const canvas = document.getElementById("node-canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
 
-    let nodes = [];
-    const numNodes = 50;
-    const maxDist = 200;
-    let mouse = { x: null, y: null };
+      let nodes = [];
+      const numNodes = 50;
+      const maxDist = 200;
+      let mouse = { x: null, y: null };
 
-    // Node class
-    class Node {
+      // Node class
+      class Node {
         constructor(x, y, vx, vy) {
-            this.x = x;
-            this.y = y;
-            this.vx = vx;
-            this.vy = vy;
-            this.radius = 2;
+          this.x = x;
+          this.y = y;
+          this.vx = vx;
+          this.vy = vy;
+          this.radius = 2;
         }
 
         draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-            ctx.fillStyle = 'rgba(157, 255, 120, 0.5)';
-            ctx.fill();
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(157, 255, 120, 0.5)";
+          ctx.fill();
         }
 
         update() {
-            if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-            if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
-            this.x += this.vx;
-            this.y += this.vy;
+          if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+          if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+          this.x += this.vx;
+          this.y += this.vy;
         }
-    }
+      }
 
-    // Create nodes
-    function init() {
+      // Create nodes
+      function init() {
         nodes = [];
         for (let i = 0; i < numNodes; i++) {
-            const x = Math.random() * canvas.width;
-            const y = Math.random() * canvas.height;
-            const vx = (Math.random() - 0.5) * 0.5;
-            const vy = (Math.random() - 0.5) * 0.5;
-            nodes.push(new Node(x, y, vx, vy));
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const vx = (Math.random() - 0.5) * 0.5;
+          const vy = (Math.random() - 0.5) * 0.5;
+          nodes.push(new Node(x, y, vx, vy));
         }
-    }
+      }
 
-    // Draw lines between nodes
-    function drawLines() {
+      // Draw lines between nodes
+      function drawLines() {
         for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-                const dist = Math.hypot(nodes[i].x - nodes[j].x, nodes[i].y - nodes[j].y);
-                if (dist < maxDist) {
-                    ctx.beginPath();
-                    ctx.moveTo(nodes[i].x, nodes[i].y);
-                    ctx.lineTo(nodes[j].x, nodes[j].y);
-                    ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
-                }
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dist = Math.hypot(
+              nodes[i].x - nodes[j].x,
+              nodes[i].y - nodes[j].y
+            );
+            if (dist < maxDist) {
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
             }
+          }
         }
-    }
-    
-    // Draw lines to mouse
-    function drawMouseLines() {
+      }
+
+      // Draw lines to mouse
+      function drawMouseLines() {
         if (mouse.x === null) return;
         for (let i = 0; i < nodes.length; i++) {
-            const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
-            if (dist < maxDist) {
-                ctx.beginPath();
-                ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(mouse.x, mouse.y);
-                ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
-                ctx.lineWidth = 0.5;
-                ctx.stroke();
-            }
+          const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
+          if (dist < maxDist) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
         }
-    }
+      }
 
-    // Animation loop
-    function animate() {
+      // Animation loop
+      function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        nodes.forEach(node => {
-            node.update();
-            node.draw();
+        nodes.forEach((node) => {
+          node.update();
+          node.draw();
         });
         drawLines();
         drawMouseLines();
         requestAnimationFrame(animate);
-    }
+      }
 
-    // Event listeners
-    window.addEventListener('resize', () => {
+      // Event listeners
+      window.addEventListener("resize", () => {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         init();
-    });
-    window.addEventListener('mousemove', (e) => {
+      });
+      window.addEventListener("mousemove", (e) => {
         mouse.x = e.x;
         mouse.y = e.y;
-    });
-    window.addEventListener('mouseout', () => {
+      });
+      window.addEventListener("mouseout", () => {
         mouse.x = null;
         mouse.y = null;
-    });
+      });
 
-    init();
-    animate();
-</script>
+      init();
+      animate();
+    </script>
   </body>
 </html>

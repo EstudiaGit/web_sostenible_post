@@ -70,6 +70,7 @@
         position: fixed;
         inset: 0;
         z-index: -1;
+        pointer-events: none;
       }
 
       .container {
@@ -80,6 +81,7 @@
         padding: var(--container-pad);
         box-shadow: none;
         position: relative;
+        z-index: 1;
         min-height: calc(100vh - 56px);
       }
 
@@ -122,6 +124,7 @@
           transparent 64%
         );
         mix-blend-mode: screen;
+        pointer-events: none;
       }
 
       header h1 {
@@ -231,7 +234,6 @@
         display: flex;
         flex-direction: row;
         gap: 0;
-        transform: none !important;
       }
 
       .product-card {
@@ -285,6 +287,12 @@
         color: var(--accent-strong);
         text-align: left;
         letter-spacing: 1px;
+      }
+
+      @media (max-width: 639px) {
+        #node-canvas {
+          display: none;
+        }
       }
 
       /* --- TABLET / DESKTOP --- */
@@ -342,7 +350,7 @@
         }
 
         .carousel-viewport {
-          overflow: hidden;
+          overflow-x: auto; /* Allow scrolling */
           flex: 1;
           scroll-snap-type: none;
         }
@@ -700,218 +708,184 @@
     </div>
 
     <script>
-      /* Fondo animado */
-      (() => {
-        const canvas = document.getElementById("node-canvas");
-        if (!canvas) return;
-        const ctx = canvas.getContext("2d");
-        const total = 52;
-        const maxDist = 170;
-        let nodes = [];
-
-        const sizeCanvas = () => {
-          canvas.width = window.innerWidth;
-          canvas.height = window.innerHeight;
-        };
-
-        class Node {
-          constructor(x, y, vx, vy) {
-            this.x = x;
-            this.y = y;
-            this.vx = vx;
-            this.vy = vy;
-          }
-          update() {
-            if (this.x <= 0 || this.x >= canvas.width) this.vx *= -1;
-            if (this.y <= 0 || this.y >= canvas.height) this.vy *= -1;
-            this.x += this.vx;
-            this.y += this.vy;
-          }
-          draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-            ctx.fillStyle = "rgba(157, 255, 120, 0.45)";
-            ctx.fill();
-          }
-        }
-
-        const initNodes = () => {
-          nodes = Array.from({ length: total }, () => {
-            return new Node(
-              Math.random() * canvas.width,
-              Math.random() * canvas.height,
-              (Math.random() - 0.5) * 0.36,
-              (Math.random() - 0.5) * 0.36
-            );
-          });
-        };
-
-        const drawConnections = () => {
-          for (let i = 0; i < nodes.length; i++) {
-            for (let j = i + 1; j < nodes.length; j++) {
-              const dist = Math.hypot(
-                nodes[i].x - nodes[j].x,
-                nodes[i].y - nodes[j].y
-              );
-              if (dist < maxDist) {
-                ctx.beginPath();
-                ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(nodes[j].x, nodes[j].y);
-                ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
-                ctx.lineWidth = 0.35;
-                ctx.stroke();
-              }
-            }
-          }
-        };
-
-        const animate = () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          nodes.forEach((node) => {
-            node.update();
-            node.draw();
-          });
-          drawConnections();
-          requestAnimationFrame(animate);
-        };
-
-        sizeCanvas();
-        initNodes();
-        animate();
-
-        let resizeTimer;
-        window.addEventListener("resize", () => {
-          clearTimeout(resizeTimer);
-          resizeTimer = setTimeout(() => {
-            sizeCanvas();
-            initNodes();
-          }, 120);
-        });
-      })();
-
-      /* Carruseles adaptativos */
+      /* Carruseles adaptativos con scrollLeft */
       class Carousel {
         constructor(root) {
           this.root = root;
-          this.id = root.dataset.carousel;
-          this.track = root.querySelector(`[data-carousel-track="${this.id}"]`);
           this.viewport = root.querySelector(".carousel-viewport");
+          this.track = root.querySelector("[data-carousel-track]");
           this.prevBtn = root.querySelector('[data-carousel-btn="prev"]');
           this.nextBtn = root.querySelector('[data-carousel-btn="next"]');
           this.cards = Array.from(this.track.children);
-          this.currentIndex = 0;
-          this.cardWidth = 0;
-          this.visibleCount = 1;
-          this.maxIndex = 0;
-          this.resizeTimer = null;
-          this.active = false;
+          this.scrollAmount = 0;
 
           this.prevBtn.addEventListener("click", () => this.prev());
           this.nextBtn.addEventListener("click", () => this.next());
-          window.addEventListener("resize", () => this.scheduleRefresh());
-          window.addEventListener("load", () => this.refresh(false));
-          this.refresh(false);
+          this.viewport.addEventListener("scroll", () => this.updateButtons());
+          window.addEventListener("resize", () => this.refresh());
+          
+          this.refresh();
         }
 
-        scheduleRefresh() {
-          clearTimeout(this.resizeTimer);
-          this.resizeTimer = setTimeout(() => this.refresh(false), 120);
-        }
-
-        refresh(animate) {
-          if (!this.cards.length) return;
-
+        refresh() {
           if (window.innerWidth < 640) {
-            this.deactivate();
-            return;
-          }
-
-          this.activate();
-
-          const styles = getComputedStyle(this.track);
-          const gap = parseFloat(styles.columnGap || styles.gap || 18);
-          const card = this.cards[0];
-          this.cardWidth = card.getBoundingClientRect().width + gap;
-          const viewportWidth = this.viewport.getBoundingClientRect().width;
-          this.visibleCount = Math.max(
-            1,
-            Math.floor((viewportWidth + gap) / this.cardWidth)
-          );
-          this.maxIndex = Math.max(0, this.cards.length - this.visibleCount);
-
-          if (this.cards.length <= this.visibleCount) {
-            this.prevBtn.disabled = true;
-            this.nextBtn.disabled = true;
-            this.track.style.transition = "none";
-            this.track.style.transform = "translateX(0)";
-            this.currentIndex = 0;
-            return;
-          }
-
-          this.prevBtn.disabled = this.currentIndex === 0;
-          this.nextBtn.disabled = this.currentIndex === this.maxIndex;
-          if (this.currentIndex > this.maxIndex)
-            this.currentIndex = this.maxIndex;
-
-          this.applyTransform(animate);
-        }
-
-        activate() {
-          if (this.active) return;
-          this.active = true;
-          this.prevBtn.hidden = false;
-          this.nextBtn.hidden = false;
-          this.track.style.transition = "none";
-          this.track.style.transform = "translateX(0)";
-        }
-
-        deactivate() {
-          if (!this.active && window.innerWidth < 640) {
             this.prevBtn.hidden = true;
             this.nextBtn.hidden = true;
-            this.track.style.transition = "none";
-            this.track.style.transform = "none";
             return;
           }
-          this.active = false;
-          this.currentIndex = 0;
-          this.prevBtn.hidden = true;
-          this.nextBtn.hidden = true;
-          this.track.style.transition = "none";
-          this.track.style.transform = "none";
+
+          this.prevBtn.hidden = false;
+          this.nextBtn.hidden = false;
+
+          if (this.cards.length > 0) {
+            const card = this.cards[0];
+            const styles = getComputedStyle(this.track);
+            const gap = parseFloat(styles.columnGap || styles.gap || 18);
+            // Usamos el ancho de una tarjeta como la cantidad a desplazar
+            this.scrollAmount = card.getBoundingClientRect().width + gap;
+          }
+          this.updateButtons();
         }
 
-        applyTransform(animate) {
-          this.track.style.transition = animate
-            ? "transform 0.38s ease"
-            : "none";
-          this.track.style.transform = `translateX(-${
-            this.currentIndex * this.cardWidth
-          }px)`;
+        updateButtons() {
+          if (window.innerWidth < 640) return;
+          
+          const scrollLeft = this.viewport.scrollLeft;
+          const maxScroll = this.viewport.scrollWidth - this.viewport.clientWidth;
+          
+          this.prevBtn.disabled = scrollLeft < 1;
+          this.nextBtn.disabled = scrollLeft >= maxScroll - 1; // -1 para margen de error
         }
 
         next() {
-          if (!this.active || this.currentIndex >= this.maxIndex) return;
-          this.currentIndex += 1;
-          this.applyTransform(true);
-          this.prevBtn.disabled = this.currentIndex === 0;
-          this.nextBtn.disabled = this.currentIndex === this.maxIndex;
+          this.viewport.scrollBy({ left: this.scrollAmount, behavior: 'smooth' });
         }
 
         prev() {
-          if (!this.active || this.currentIndex <= 0) return;
-          this.currentIndex -= 1;
-          this.applyTransform(true);
-          this.prevBtn.disabled = this.currentIndex === 0;
-          this.nextBtn.disabled = this.currentIndex === this.maxIndex;
+          this.viewport.scrollBy({ left: -this.scrollAmount, behavior: 'smooth' });
         }
       }
 
+      window.carousels = [];
       document.addEventListener("DOMContentLoaded", () => {
         document
           .querySelectorAll("[data-carousel]")
-          .forEach((carouselRoot) => new Carousel(carouselRoot));
+          .forEach((carouselRoot) => window.carousels.push(new Carousel(carouselRoot)));
       });
+    </script>
+    <script>
+      const canvas = document.getElementById("node-canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let nodes = [];
+      const numNodes = 50;
+      const maxDist = 200;
+      let mouse = { x: null, y: null };
+
+      // Node class
+      class Node {
+        constructor(x, y, vx, vy) {
+          this.x = x;
+          this.y = y;
+          this.vx = vx;
+          this.vy = vy;
+          this.radius = 2;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(157, 255, 120, 0.5)";
+          ctx.fill();
+        }
+
+        update() {
+          if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+          if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+          this.x += this.vx;
+          this.y += this.vy;
+        }
+      }
+
+      // Create nodes
+      function init() {
+        nodes = [];
+        for (let i = 0; i < numNodes; i++) {
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const vx = (Math.random() - 0.5) * 0.5;
+          const vy = (Math.random() - 0.5) * 0.5;
+          nodes.push(new Node(x, y, vx, vy));
+        }
+      }
+
+      // Draw lines between nodes
+      function drawLines() {
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dist = Math.hypot(
+              nodes[i].x - nodes[j].x,
+              nodes[i].y - nodes[j].y
+            );
+            if (dist < maxDist) {
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      // Draw lines to mouse
+      function drawMouseLines() {
+        if (mouse.x === null) return;
+        for (let i = 0; i < nodes.length; i++) {
+          const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
+          if (dist < maxDist) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(157, 255, 120, ${1 - dist / maxDist})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Animation loop
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        nodes.forEach((node) => {
+          node.update();
+          node.draw();
+        });
+        drawLines();
+        drawMouseLines();
+        requestAnimationFrame(animate);
+      }
+
+      // Event listeners
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+      });
+      window.addEventListener("mousemove", (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+      });
+      window.addEventListener("mouseout", () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      init();
+      animate();
     </script>
   </body>
 </html>
