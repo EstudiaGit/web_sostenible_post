@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Infografía: Guía para un Diseño Web Sostenible</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: #f0f7f8;
+      }
+      .chart-container {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 300px;
+        max-height: 400px;
+      }
+      @media (min-width: 768px) {
+        .chart-container {
+          height: 350px;
+        }
+      }
+      .flowchart-step {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        min-height: 80px;
+        transition: all 0.3s ease;
+      }
+      .flowchart-arrow {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #0a9396;
+        transform: rotate(90deg);
+      }
+      @media (min-width: 768px) {
+        .flowchart-arrow {
+          transform: rotate(0deg);
+        }
+      }
+    </style>
+  </head>
+  <body class="text-gray-800">
+    <div class="container mx-auto p-4 md:p-8">
+      <header class="text-center mb-12">
+        <h1 class="text-4xl md:text-6xl font-black text-[#005f73] mb-2">
+          Construyendo una Web Sostenible
+        </h1>
+        <p class="text-lg md:text-xl text-[#0a9396] max-w-3xl mx-auto">
+          Una guía visual para diseñar e implementar experiencias digitales
+          eficientes y responsables con el medio ambiente.
+        </p>
+      </header>
+
+      <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div
+          class="md:col-span-2 lg:col-span-3 bg-white rounded-lg shadow-lg p-6 flex flex-col md:flex-row items-center justify-center text-center"
+        >
+          <div class="md:w-1/2">
+            <p class="text-2xl font-bold text-[#005f73] mb-2">
+              El Impacto Digital es Real
+            </p>
+            <p class="text-[#0a9396]">
+              Si Internet fuera un país, sería el
+              <strong>4º mayor consumidor de electricidad</strong> del mundo. El
+              diseño web sostenible no es una opción, es una necesidad para
+              reducir nuestra huella de carbono colectiva.
+            </p>
+          </div>
+          <div class="md:w-1/2 mt-4 md:mt-0">
+            <p class="text-8xl font-black text-[#ee9b00]">4%</p>
+            <p class="text-lg font-bold text-[#ca6702]">
+              De las emisiones globales de CO2 son generadas por Internet y sus
+              sistemas asociados.
+            </p>
+          </div>
+        </div>
+
+        <div
+          class="md:col-span-2 lg:col-span-3 bg-white rounded-lg shadow-lg p-6"
+        >
+          <h2 class="text-3xl font-bold text-center text-[#005f73] mb-6">
+            Principios Fundamentales de Validación
+          </h2>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 text-center"
+          >
+            <div class="bg-[#e0f2f1] p-4 rounded-lg">
+              <p class="font-bold text-[#005f73]">✓ Específica</p>
+              <p class="text-sm text-[#0a9396]">
+                Directrices claras y sin ambigüedad.
+              </p>
+            </div>
+            <div class="bg-[#e0f2f1] p-4 rounded-lg">
+              <p class="font-bold text-[#005f73]">✓ Medible</p>
+              <p class="text-sm text-[#0a9396]">
+                Con métricas y KPIs cuantificables.
+              </p>
+            </div>
+            <div class="bg-[#e0f2f1] p-4 rounded-lg">
+              <p class="font-bold text-[#005f73]">✓ Accionable</p>
+              <p class="text-sm text-[#0a9396]">
+                Implementable directamente por equipos.
+              </p>
+            </div>
+            <div class="bg-[#e0f2f1] p-4 rounded-lg">
+              <p class="font-bold text-[#005f73]">✓ Relevante</p>
+              <p class="text-sm text-[#0a9396]">
+                Con un impacto real en la sostenibilidad.
+              </p>
+            </div>
+            <div class="bg-[#e0f2f1] p-4 rounded-lg">
+              <p class="font-bold text-[#005f73]">✓ Actualizada</p>
+              <p class="text-sm text-[#0a9396]">
+                Reflejando prácticas vigentes (2023-2025).
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h3 class="text-2xl font-bold text-center text-[#005f73] mb-4">
+            Métrica Clave: Peso de la Página
+          </h3>
+          <p class="text-center text-sm text-gray-600 mb-4">
+            Un objetivo clave es mantener las páginas por debajo de 500KB. Esto
+            reduce drásticamente el tiempo de carga y el consumo de energía,
+            especialmente en conexiones lentas.
+          </p>
+          <div class="chart-container h-64 md:h-72">
+            <canvas id="pageWeightChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h3 class="text-2xl font-bold text-center text-[#005f73] mb-4">
+            Métrica Clave: Peticiones HTTP
+          </h3>
+          <p class="text-center text-sm text-gray-600 mb-4">
+            Cada recurso (imagen, script, fuente) es una petición. Menos
+            peticiones significan menos trabajo para el servidor y el cliente.
+            El objetivo es mantenerse por debajo de 20.
+          </p>
+          <div class="chart-container h-64 md:h-72">
+            <canvas id="httpRequestsChart"></canvas>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <h3 class="text-2xl font-bold text-center text-[#005f73] mb-4">
+            Componentes UI con Mayor Costo Energético
+          </h3>
+          <p class="text-center text-sm text-gray-600 mb-4">
+            Algunos componentes de interfaz de usuario consumen más recursos que
+            otros. Priorizar alternativas ligeras es fundamental para un diseño
+            sostenible.
+          </p>
+          <div class="chart-container h-64 md:h-72">
+            <canvas id="costlyComponentsChart"></canvas>
+          </div>
+        </div>
+
+        <div
+          class="md:col-span-2 lg:col-span-3 bg-white rounded-lg shadow-lg p-6"
+        >
+          <h2 class="text-3xl font-bold text-center text-[#005f73] mb-6">
+            Flujo de Trabajo para un Desarrollo Sostenible
+          </h2>
+          <div class="grid grid-cols-1 md:grid-cols-5 gap-4 items-center">
+            <div class="flowchart-step bg-[#94d2bd] text-[#005f73] font-bold">
+              1. Estrategia y Diseño UX
+            </div>
+            <div class="flowchart-arrow">➔</div>
+            <div class="flowchart-step bg-[#e9d8a6] text-[#ca6702] font-bold">
+              2. Gestión de Recursos
+            </div>
+            <div class="flowchart-arrow">➔</div>
+            <div class="flowchart-step bg-[#ee9b00] text-white font-bold">
+              3. Desarrollo y Arquitectura
+            </div>
+            <div class="flowchart-arrow">➔</div>
+            <div class="flowchart-step bg-[#ca6702] text-white font-bold">
+              4. Optimización y Pruebas
+            </div>
+            <div class="flowchart-arrow">➔</div>
+            <div class="flowchart-step bg-[#ae2012] text-white font-bold">
+              5. Despliegue y Monitoreo
+            </div>
+          </div>
+          <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <h4 class="font-bold text-[#005f73]">
+                Patrones de Diseño Eficientes
+              </h4>
+              <ul class="list-disc list-inside text-sm text-gray-700 mt-2">
+                <li>Navegación simple y clara</li>
+                <li>Diseño "Mobile-first"</li>
+                <li>Uso de colores del sistema</li>
+                <li>Evitar "infinite scroll"</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-[#005f73]">
+                Gestión de Recursos Inteligente
+              </h4>
+              <ul class="list-disc list-inside text-sm text-gray-700 mt-2">
+                <li>Compresión agresiva de imágenes</li>
+                <li>Formatos modernos (WebP, AVIF)</li>
+                <li>Carga diferida (Lazy Loading)</li>
+                <li>Limitar el uso de fuentes personalizadas</li>
+              </ul>
+            </div>
+            <div>
+              <h4 class="font-bold text-[#005f73]">
+                Arquitectura de Alto Rendimiento
+              </h4>
+              <ul class="list-disc list-inside text-sm text-gray-700 mt-2">
+                <li>Minimizar y agrupar CSS/JS</li>
+                <li>Estrategias de caché eficaces</li>
+                <li>Reducir el uso de JS de terceros</li>
+                <li>Renderizado del lado del servidor (SSR)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="text-center mt-12 text-sm text-gray-500">
+        <p>
+          Infografía generada a partir de las directrices de investigación para
+          un Manual de Diseño Web Sostenible.
+        </p>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const brilliantBlues = {
+          primary: "#0a9396",
+          secondary: "#94d2bd",
+          accent: "#ee9b00",
+          warning: "#ca6702",
+          danger: "#ae2012",
+          light: "#e9d8a6",
+          dark: "#005f73",
+          gray: "rgba(156, 163, 175, 0.5)",
+        };
+
+        const defaultChartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: "bottom",
+              labels: {
+                color: brilliantBlues.dark,
+              },
+            },
+            tooltip: {
+              callbacks: {
+                title: function (tooltipItems) {
+                  const item = tooltipItems[0];
+                  let label = item.chart.data.labels[item.dataIndex];
+                  if (Array.isArray(label)) {
+                    return label.join(" ");
+                  } else {
+                    return label;
+                  }
+                },
+              },
+            },
+          },
+        };
+
+        function wrapLabel(str, maxWidth) {
+          if (str.length <= maxWidth) {
+            return str;
+          }
+          let wrapped = [];
+          let words = str.split(" ");
+          let currentLine = "";
+          words.forEach((word) => {
+            if ((currentLine + word).length > maxWidth) {
+              wrapped.push(currentLine.trim());
+              currentLine = "";
+            }
+            currentLine += word + " ";
+          });
+          wrapped.push(currentLine.trim());
+          return wrapped;
+        }
+
+        const ctxPageWeight = document.getElementById("pageWeightChart");
+        if (ctxPageWeight) {
+          new Chart(ctxPageWeight, {
+            type: "doughnut",
+            data: {
+              labels: [
+                "Objetivo Sostenible (<500KB)",
+                "Sitio Web Promedio (~1900KB)",
+              ],
+              datasets: [
+                {
+                  label: "Peso de Página (KB)",
+                  data: [500, 1400],
+                  backgroundColor: [
+                    brilliantBlues.primary,
+                    brilliantBlues.gray,
+                  ],
+                  borderColor: "#ffffff",
+                  borderWidth: 4,
+                },
+              ],
+            },
+            options: { ...defaultChartOptions },
+          });
+        }
+
+        const ctxHttpRequests = document.getElementById("httpRequestsChart");
+        if (ctxHttpRequests) {
+          new Chart(ctxHttpRequests, {
+            type: "doughnut",
+            data: {
+              labels: ["Objetivo Sostenible (<20)", "Sitio Web Promedio (~70)"],
+              datasets: [
+                {
+                  label: "Número de Peticiones",
+                  data: [20, 50],
+                  backgroundColor: [
+                    brilliantBlues.secondary,
+                    brilliantBlues.gray,
+                  ],
+                  borderColor: "#ffffff",
+                  borderWidth: 4,
+                },
+              ],
+            },
+            options: { ...defaultChartOptions },
+          });
+        }
+
+        const ctxCostlyComponents = document.getElementById(
+          "costlyComponentsChart"
+        );
+        if (ctxCostlyComponents) {
+          const originalLabels = [
+            "Videos en Autoplay",
+            "Carruseles de imágenes de alta resolución",
+            "Mapas interactivos complejos",
+            "Animaciones JS pesadas",
+            "Imágenes no optimizadas",
+            "Componentes Estáticos",
+          ];
+          const wrappedLabels = originalLabels.map((label) =>
+            wrapLabel(label, 16)
+          );
+
+          new Chart(ctxCostlyComponents, {
+            type: "bar",
+            data: {
+              labels: wrappedLabels,
+              datasets: [
+                {
+                  label: "Impacto Energético Relativo",
+                  data: [95, 85, 75, 60, 50, 10],
+                  backgroundColor: [
+                    brilliantBlues.danger,
+                    brilliantBlues.warning,
+                    brilliantBlues.accent,
+                    brilliantBlues.light,
+                    brilliantBlues.secondary,
+                    brilliantBlues.primary,
+                  ],
+                  borderRadius: 4,
+                },
+              ],
+            },
+            options: {
+              ...defaultChartOptions,
+              indexAxis: "y",
+              scales: {
+                y: {
+                  ticks: { color: brilliantBlues.dark },
+                },
+                x: {
+                  ticks: { color: brilliantBlues.dark },
+                },
+              },
+              plugins: {
+                ...defaultChartOptions.plugins,
+                legend: {
+                  display: false,
+                },
+              },
+            },
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

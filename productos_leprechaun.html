@@ -455,6 +455,9 @@
           29/09/2025.
         </p>
         <a href="index.html" class="nav-link">[ VOLVER A S.Y.N.T.H. BLOG ]</a>
+        <a href="comics.html" class="nav-link"
+          >[ VER LISTADO COMPLETO DE CÓMICS ]</a
+        >
       </header>
 
       <main>
@@ -723,7 +726,7 @@
           this.nextBtn.addEventListener("click", () => this.next());
           this.viewport.addEventListener("scroll", () => this.updateButtons());
           window.addEventListener("resize", () => this.refresh());
-          
+
           this.refresh();
         }
 
@@ -749,20 +752,27 @@
 
         updateButtons() {
           if (window.innerWidth < 640) return;
-          
+
           const scrollLeft = this.viewport.scrollLeft;
-          const maxScroll = this.viewport.scrollWidth - this.viewport.clientWidth;
-          
+          const maxScroll =
+            this.viewport.scrollWidth - this.viewport.clientWidth;
+
           this.prevBtn.disabled = scrollLeft < 1;
           this.nextBtn.disabled = scrollLeft >= maxScroll - 1; // -1 para margen de error
         }
 
         next() {
-          this.viewport.scrollBy({ left: this.scrollAmount, behavior: 'smooth' });
+          this.viewport.scrollBy({
+            left: this.scrollAmount,
+            behavior: "smooth",
+          });
         }
 
         prev() {
-          this.viewport.scrollBy({ left: -this.scrollAmount, behavior: 'smooth' });
+          this.viewport.scrollBy({
+            left: -this.scrollAmount,
+            behavior: "smooth",
+          });
         }
       }
 
@@ -770,7 +780,9 @@
       document.addEventListener("DOMContentLoaded", () => {
         document
           .querySelectorAll("[data-carousel]")
-          .forEach((carouselRoot) => window.carousels.push(new Carousel(carouselRoot)));
+          .forEach((carouselRoot) =>
+            window.carousels.push(new Carousel(carouselRoot))
+          );
       });
     </script>
     <script>

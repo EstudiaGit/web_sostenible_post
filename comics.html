@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Listado de Cómics - Mi Blog CRT</title>
+    <!-- Los estilos son los mismos, no hace falta copiarlos de nuevo si están en un .css -->
+    <!-- Como estaban en el HTML, los he copiado aquí para que funcione -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg-main: #030303;
+        --bg-panel: rgba(4, 12, 4, 0.94);
+        --accent: #9dff78;
+        --accent-strong: #54ff42;
+        --text-primary: #a2ff91;
+        --text-secondary: #6aed78;
+        --border: 1px solid rgba(157, 255, 120, 0.7);
+        --container-pad: clamp(18px, 5vw, 36px);
+        font-family: "Share Tech Mono", "IBM Plex Mono", monospace;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(
+            circle at 12% 18%,
+            rgba(90, 255, 140, 0.2),
+            transparent 58%
+          ),
+          radial-gradient(
+            circle at 86% 74%,
+            rgba(80, 240, 120, 0.18),
+            transparent 55%
+          ),
+          var(--bg-main);
+        color: var(--text-primary);
+        padding: 16px 0 56px;
+        position: relative;
+        overflow-x: hidden;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: linear-gradient(
+            rgba(120, 255, 150, 0.08) 1px,
+            transparent 1px
+          ),
+          linear-gradient(90deg, rgba(120, 255, 150, 0.08) 1px, transparent 1px);
+        background-size: 120px 120px;
+        opacity: 0.42;
+        pointer-events: none;
+        z-index: -2;
+      }
+      .container {
+        width: 100%;
+        margin: 0;
+        background: var(--bg-panel);
+        border: var(--border);
+        padding: var(--container-pad);
+        box-shadow: none;
+        position: relative;
+        z-index: 1;
+        min-height: calc(100vh - 56px);
+      }
+      .container::after {
+        content: "";
+        position: absolute;
+        inset: 6px;
+        border: 1px dashed rgba(120, 255, 150, 0.27);
+        pointer-events: none;
+      }
+      header {
+        padding: clamp(20px, 6vw, 50px);
+        border: var(--border);
+        border-color: var(--accent-strong);
+        background: rgba(1, 9, 3, 0.9);
+        margin-bottom: clamp(24px, 7vw, 46px);
+        position: relative;
+        overflow: hidden;
+      }
+      header::before {
+        content: "[STATUS: DATASTREAM]";
+        position: absolute;
+        top: 14px;
+        right: clamp(12px, 4vw, 28px);
+        font-size: 0.78rem;
+        letter-spacing: 4px;
+        color: var(--text-secondary);
+      }
+      header h1 {
+        margin: 0 0 14px;
+        font-size: clamp(1.6rem, 5.8vw, 2.6rem);
+        text-transform: uppercase;
+        letter-spacing: 5px;
+        padding-bottom: 12px;
+        border-bottom: var(--border);
+      }
+      header p {
+        margin: 0;
+        font-size: clamp(0.9rem, 3.3vw, 1.06rem);
+        color: var(--text-secondary);
+        line-height: 1.6;
+      }
+      .nav-link {
+        display: inline-block;
+        margin-top: clamp(16px, 4vw, 22px);
+        padding: 9px 18px;
+        border: var(--border);
+        color: var(--accent);
+        text-decoration: none;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        transition: all 0.25s ease;
+      }
+      .nav-link:hover {
+        background: var(--accent);
+        color: #021402;
+        box-shadow: 0 0 14px rgba(157, 255, 120, 0.45);
+      }
+      main {
+        display: grid;
+        gap: clamp(24px, 6vw, 38px);
+      }
+      .section-wrapper {
+        position: relative;
+      }
+      .section-wrapper::before {
+        content: "";
+        position: absolute;
+        inset: -12px;
+        border: 1px dashed rgba(97, 206, 117, 0.22);
+        pointer-events: none;
+      }
+      .section-title {
+        position: absolute;
+        top: -18px;
+        left: clamp(10px, 6vw, 28px);
+        background: #000c03;
+        padding: 6px 16px;
+        border: var(--border);
+        font-size: 0.76rem;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        z-index: 2;
+      }
+      .section-box {
+        border: var(--border);
+        padding: clamp(18px, 6vw, 34px);
+        background: rgba(0, 10, 2, 0.92);
+        position: relative;
+      }
+
+      /* Estilos para la tabla */
+      .comics-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 24px;
+      }
+      .comics-table th,
+      .comics-table td {
+        padding: 12px 16px;
+        border: 1px solid rgba(157, 255, 120, 0.3);
+        text-align: left;
+        font-size: clamp(0.8rem, 3vw, 0.95rem);
+      }
+      .comics-table thead {
+        background-color: rgba(157, 255, 120, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+      .comics-table tbody tr:hover {
+        background-color: rgba(157, 255, 120, 0.08);
+      }
+      .comics-table img {
+        width: 60px;
+        height: auto;
+        display: block;
+        border: 1px solid rgba(157, 255, 120, 0.3);
+      }
+      .comics-table a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .comics-table a:hover {
+        text-decoration: underline;
+      }
+
+      @media (min-width: 640px) {
+        body {
+          padding: 32px clamp(28px, 7vw, 48px) 72px;
+        }
+        .container {
+          max-width: 1180px;
+          margin: 0 auto;
+          box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.65);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Listado Completo de Cómics</h1>
+        <p>Datos extraídos del archivo local 'comics.json'.</p>
+        <a href="index.html" class="nav-link">[ VOLVER A PRODUCTOS ]</a>
+      </header>
+
+      <main>
+        <section class="section-wrapper">
+          <div class="section-title">[ DATABASE: COMICS ]</div>
+          <div class="section-box">
+            <table class="comics-table">
+              <thead>
+                <tr>
+                  <th>Portada</th>
+                  <th>Título</th>
+                  <th>Precio</th>
+                </tr>
+              </thead>
+              <tbody id="comics-tbody">
+                <!-- El contenido se generará aquí con JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Referencia al script que cargará los datos -->
+    <script src="js/comic-loader.js"></script>
+  </body>
+</html>
