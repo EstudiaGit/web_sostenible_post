@@ -298,13 +298,13 @@
       /* --- TABLET / DESKTOP --- */
       @media (min-width: 640px) {
         body {
-          padding: 32px clamp(28px, 7vw, 48px) 72px;
+          padding: 32px 0 72px; /* Eliminado padding horizontal */
         }
 
         .container {
-          max-width: 1180px;
-          margin: 0 auto;
-          box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.65);
+          max-width: 1226px; /* Ajuste de ancho según el inspector de Chrome */
+          margin: 0 auto; /* Centrar el contenedor */
+          box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.65); /* Restaurar la sombra */
         }
 
         .container::after {
@@ -312,7 +312,7 @@
         }
 
         .section-box {
-          padding: clamp(18px, 6vw, 34px);
+          padding: clamp(18px, 6vw, 48px); /* Aumentado el padding para más distancia */
         }
 
         .swipe-hint {
@@ -323,6 +323,7 @@
           display: flex;
           align-items: center;
           gap: 16px;
+          overflow: hidden; /* Medida de seguridad para evitar desbordamientos */
         }
 
         .carousel-btn {
@@ -352,6 +353,7 @@
         .carousel-viewport {
           overflow-x: auto; /* Allow scrolling */
           flex: 1;
+          min-width: 0; /* Solución para el desbordamiento del carrusel en flexbox */
           scroll-snap-type: none;
         }
 
@@ -417,6 +419,11 @@
       }
 
       @media (min-width: 960px) {
+        main > .section-wrapper { /* Aplicado a todas las secciones */
+          max-width: 1150px;
+          margin: 0 auto 2rem auto;
+        }
+
         .carousel {
           gap: 18px;
         }
@@ -711,7 +718,7 @@
     </div>
 
     <script>
-      /* Carruseles adaptativos con scrollLeft */
+      /* Carruseles adaptativos con scrollLeft y cálculo de ancho explícito */
       class Carousel {
         constructor(root) {
           this.root = root;
@@ -719,6 +726,12 @@
           this.track = root.querySelector("[data-carousel-track]");
           this.prevBtn = root.querySelector('[data-carousel-btn="prev"]');
           this.nextBtn = root.querySelector('[data-carousel-btn="next"]');
+          
+          if (!this.viewport || !this.track || !this.prevBtn || !this.nextBtn) {
+            console.error("Carousel elements not found in", root);
+            return;
+          }
+
           this.cards = Array.from(this.track.children);
           this.scrollAmount = 0;
 
@@ -727,52 +740,69 @@
           this.viewport.addEventListener("scroll", () => this.updateButtons());
           window.addEventListener("resize", () => this.refresh());
 
+          // Usamos un observador para refrescar cuando las imágenes carguen o algo cambie
+          const observer = new MutationObserver(() => this.refresh());
+          observer.observe(this.track, { childList: true, subtree: true });
+          
+          // También refrescamos en carga de imágenes
+          this.track.addEventListener('load', () => this.refresh(), true);
+
           this.refresh();
         }
 
         refresh() {
-          if (window.innerWidth < 640) {
-            this.prevBtn.hidden = true;
-            this.nextBtn.hidden = true;
-            return;
-          }
+          // Esperamos un ciclo de renderizado para asegurar que los estilos están aplicados
+          requestAnimationFrame(() => {
+            if (window.innerWidth < 640) {
+              this.prevBtn.hidden = true;
+              this.nextBtn.hidden = true;
+              this.track.style.width = ''; // Reset width
+              return;
+            }
 
-          this.prevBtn.hidden = false;
-          this.nextBtn.hidden = false;
+            this.prevBtn.hidden = false;
+            this.nextBtn.hidden = false;
 
-          if (this.cards.length > 0) {
-            const card = this.cards[0];
             const styles = getComputedStyle(this.track);
-            const gap = parseFloat(styles.columnGap || styles.gap || 18);
-            // Usamos el ancho de una tarjeta como la cantidad a desplazar
-            this.scrollAmount = card.getBoundingClientRect().width + gap;
-          }
-          this.updateButtons();
+            const gap = parseFloat(styles.columnGap || styles.gap || 0);
+            let totalWidth = 0;
+
+            this.cards.forEach(card => {
+              totalWidth += card.offsetWidth;
+            });
+            
+            totalWidth += (this.cards.length > 1 ? (this.cards.length - 1) * gap : 0);
+            
+            this.track.style.width = `${totalWidth}px`;
+            
+            if (this.cards.length > 0) {
+                this.scrollAmount = this.cards[0].offsetWidth + gap;
+            }
+
+            this.updateButtons();
+          });
         }
 
         updateButtons() {
           if (window.innerWidth < 640) return;
 
-          const scrollLeft = this.viewport.scrollLeft;
-          const maxScroll =
-            this.viewport.scrollWidth - this.viewport.clientWidth;
+          // Usamos requestAnimationFrame para leer las propiedades de scroll después del renderizado
+          requestAnimationFrame(() => {
+            const scrollLeft = this.viewport.scrollLeft;
+            const maxScroll = this.viewport.scrollWidth - this.viewport.clientWidth;
 
-          this.prevBtn.disabled = scrollLeft < 1;
-          this.nextBtn.disabled = scrollLeft >= maxScroll - 1; // -1 para margen de error
+            this.prevBtn.disabled = scrollLeft < 1;
+            // Añadimos un pequeño umbral para mayor fiabilidad
+            this.nextBtn.disabled = scrollLeft >= maxScroll - 5; 
+          });
         }
 
         next() {
-          this.viewport.scrollBy({
-            left: this.scrollAmount,
-            behavior: "smooth",
-          });
+          this.viewport.scrollBy({ left: this.scrollAmount, behavior: "smooth" });
         }
 
         prev() {
-          this.viewport.scrollBy({
-            left: -this.scrollAmount,
-            behavior: "smooth",
-          });
+          this.viewport.scrollBy({ left: -this.scrollAmount, behavior: "smooth" });
         }
       }
 
