@@ -473,8 +473,10 @@
       }
 
       #search-input::placeholder {
-        color: var(--text-muted);
-        opacity: 0.6;
+        color: var(--text-cyber);
+        opacity: 1;
+        font-weight: 700;
+        letter-spacing: 0.03em;
       }
 
       /* MOBILE FIRST - Table */
@@ -712,6 +714,34 @@
           transition-duration: 0.01ms !important;
         }
       }
+      /* Destacar buscador solo en móvil */
+      @media (max-width: 767px) {
+        .search-container {
+          background: var(--gradient-cyber);
+          border: 2px solid var(--border-primary);
+          border-radius: 1px;
+          box-shadow: 0 0 18px rgba(0, 255, 204, 0.25);
+          padding: 1px;
+          margin-bottom: 32px;
+          animation: pulse-search 4.5s infinite alternate;
+        }
+        #search-input {
+          background: var(--bg-primary);
+          border: 2px solid var(--border-primary);
+          color: var(--text-cyber);
+          font-weight: 400;
+          font-size: 0.9rem;
+          box-shadow: 0 0 8px rgba(0, 255, 204, 0.15);
+        }
+      }
+      @keyframes pulse-search {
+        0% {
+          box-shadow: 0 0 18px rgba(0, 255, 204, 0.25);
+        }
+        100% {
+          box-shadow: 0 0 36px rgba(0, 255, 204, 0.45);
+        }
+      }
     </style>
   </head>
   <body>
@@ -736,7 +766,7 @@
             <input
               type="search"
               id="search-input"
-              placeholder="// Buscar por título..."
+              placeholder="// Buscar por título... 💚"
             />
           </div>
           <table class="comics-table">
