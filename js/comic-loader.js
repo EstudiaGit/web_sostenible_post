@@ -31,17 +31,17 @@ document.addEventListener("DOMContentLoaded", () => {
     paginatedComics.forEach((comic) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>
+        <td data-label="Portada">
           <a href="${comic.url_producto}" target="_blank" rel="noopener noreferrer">
             <img src="${comic.url_imagen}" alt="Portada de ${comic.nombre}">
           </a>
         </td>
-        <td>
+        <td data-label="Título">
           <a href="${comic.url_producto}" target="_blank" rel="noopener noreferrer">
             ${comic.nombre}
           </a>
         </td>
-        <td>${comic.precio}</td>
+        <td data-label="Precio">${comic.precio}</td>
       `;
       tableBody.appendChild(row);
     });

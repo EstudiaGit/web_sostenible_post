@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Listado de Cómics - Mi Blog CRT</title>
 
-    <!-- Estilos de index.html -->
     <style>
       @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap");
 
@@ -39,11 +38,13 @@
         --shadow-glow-strong: 0 0 30px rgba(0, 255, 204, 0.5),
           0 0 60px rgba(0, 255, 204, 0.2);
       }
+
       * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
       }
+
       body {
         font-family: "JetBrains Mono", "Courier New", monospace;
         background: var(--bg-primary);
@@ -53,6 +54,7 @@
         position: relative;
         overflow-x: hidden;
       }
+
       body::before {
         content: "";
         position: fixed;
@@ -71,6 +73,7 @@
         z-index: 9999;
         animation: scanline 8s linear infinite;
       }
+
       @keyframes scanline {
         0% {
           transform: translateY(0);
@@ -79,6 +82,7 @@
           transform: translateY(10px);
         }
       }
+
       #node-canvas {
         position: fixed;
         top: 0;
@@ -88,32 +92,71 @@
         z-index: 0;
         opacity: 0.15;
       }
+
+      /* MOBILE FIRST - Container */
       .container {
         position: relative;
         z-index: 1;
-        max-width: 1435px;
+        width: 100%;
         margin: 0 auto;
-        padding: clamp(24px, 5vw, 60px);
+        padding: 16px;
       }
+
+      @media (min-width: 640px) {
+        .container {
+          padding: 24px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .container {
+          max-width: 1435px;
+          padding: 40px;
+        }
+      }
+
+      /* MOBILE FIRST - Header */
       header {
         background: var(--gradient-dark);
         border: 2px solid var(--border-primary);
-        padding: clamp(40px, 6vw, 40px);
-        margin-bottom: clamp(32px, 3vw, 500px);
+        padding: 24px 16px;
+        margin-bottom: 24px;
         position: relative;
         overflow: hidden;
         box-shadow: var(--shadow-glow);
       }
+
+      @media (min-width: 640px) {
+        header {
+          padding: 32px 24px;
+          margin-bottom: 32px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        header {
+          padding: 40px;
+          margin-bottom: 48px;
+        }
+      }
+
       header::before {
         content: "";
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 6px;
+        height: 4px;
         background: var(--gradient-cyber);
         box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
       }
+
+      @media (min-width: 640px) {
+        header::before {
+          height: 6px;
+        }
+      }
+
       header::after {
         content: "";
         position: absolute;
@@ -127,9 +170,11 @@
           transparent 70%
         );
       }
+
       header:hover::after {
         animation: pulse 0.6s ease-in-out;
       }
+
       @keyframes pulse {
         0%,
         100% {
@@ -141,57 +186,127 @@
           transform: scale(1.05);
         }
       }
+
       header > * {
         position: relative;
         z-index: 1;
       }
+
+      /* MOBILE FIRST - Títulos */
       h1 {
-        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-size: 2rem;
         font-weight: 800;
-        letter-spacing: 0.15em;
-        margin-bottom: 20px;
+        letter-spacing: 0.1em;
+        margin-bottom: 16px;
         background: var(--gradient-cyber);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
         text-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+        word-break: break-word;
       }
+
+      @media (min-width: 480px) {
+        h1 {
+          font-size: 2.5rem;
+          letter-spacing: 0.12em;
+        }
+      }
+
+      @media (min-width: 768px) {
+        h1 {
+          font-size: 3rem;
+          letter-spacing: 0.15em;
+          margin-bottom: 20px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        h1 {
+          font-size: 4rem;
+        }
+      }
+
       header p {
         color: var(--text-secondary);
-        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
-        max-width: 80ch;
-        line-height: 1.7;
-        margin-bottom: 30px;
+        font-size: 0.85rem;
+        line-height: 1.6;
+        margin-bottom: 20px;
         opacity: 0.9;
       }
+
+      @media (min-width: 640px) {
+        header p {
+          font-size: 0.95rem;
+          line-height: 1.7;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        header p {
+          font-size: 1.1rem;
+          max-width: 80ch;
+          margin-bottom: 30px;
+        }
+      }
+
+      /* MOBILE FIRST - Header subline */
       .header-subline {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
-        gap: 20px;
+        flex-direction: column;
+        gap: 16px;
       }
+
+      @media (min-width: 768px) {
+        .header-subline {
+          flex-direction: row;
+          justify-content: space-between;
+          align-items: center;
+          gap: 20px;
+        }
+      }
+
       .header-subline p {
         margin-bottom: 0;
-        flex: 1;
-        min-width: 300px;
       }
+
+      /* MOBILE FIRST - Nav Link */
       .nav-link {
         display: inline-flex;
         align-items: center;
-        padding: 12px 24px;
+        justify-content: center;
+        padding: 12px 16px;
         background: var(--bg-secondary);
         border: 2px solid var(--border-primary);
         color: var(--text-cyber);
-        font-size: 0.85rem;
+        font-size: 0.75rem;
         font-weight: 700;
-        letter-spacing: 0.1em;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
         text-decoration: none;
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+        text-align: center;
+        width: 100%;
       }
+
+      @media (min-width: 480px) {
+        .nav-link {
+          font-size: 0.8rem;
+          padding: 12px 20px;
+        }
+      }
+
+      @media (min-width: 768px) {
+        .nav-link {
+          width: auto;
+          font-size: 0.85rem;
+          padding: 12px 24px;
+          letter-spacing: 0.1em;
+        }
+      }
+
       .nav-link::before {
         content: "";
         position: absolute;
@@ -203,74 +318,391 @@
         transition: left 0.3s ease;
         z-index: -1;
       }
+
       .nav-link:hover {
         color: var(--bg-primary);
         box-shadow: var(--shadow-glow-strong);
         transform: translateY(-2px);
       }
+
       .nav-link:hover::before {
         left: 0;
       }
+
+      /* MOBILE FIRST - Main */
       main {
         display: grid;
-        gap: clamp(24px, 4vw, 48px);
+        gap: 24px;
       }
+
+      @media (min-width: 768px) {
+        main {
+          gap: 32px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        main {
+          gap: 48px;
+        }
+      }
+
+      /* MOBILE FIRST - Section */
       section {
         background: var(--gradient-dark);
         border: 2px solid var(--border-secondary);
-        padding: clamp(32px, 5vw, 32px);
+        padding: 40px 16px 20px;
         position: relative;
         box-shadow: var(--shadow-lg);
         transition: border-color 0.3s ease;
       }
+
+      @media (min-width: 640px) {
+        section {
+          padding: 48px 24px 24px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        section {
+          padding: 52px 32px 32px;
+        }
+      }
+
       section:hover {
         border-color: var(--border-primary);
       }
+
       section::before {
         content: attr(data-label);
         position: absolute;
-        top: -14px;
-        left: 32px;
-        padding: 6px 20px;
+        top: -12px;
+        left: 16px;
+        padding: 4px 12px;
         background: var(--gradient-cyber);
         color: var(--bg-primary);
-        font-size: 0.75rem;
+        font-size: 0.65rem;
         font-weight: 800;
-        letter-spacing: 0.15em;
+        letter-spacing: 0.1em;
         box-shadow: var(--shadow-glow);
       }
+
+      @media (min-width: 640px) {
+        section::before {
+          top: -14px;
+          left: 24px;
+          padding: 6px 16px;
+          font-size: 0.7rem;
+          letter-spacing: 0.12em;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        section::before {
+          left: 32px;
+          padding: 6px 20px;
+          font-size: 0.75rem;
+          letter-spacing: 0.15em;
+        }
+      }
+
       section h2 {
-        font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+        font-size: 1.5rem;
         font-weight: 800;
         letter-spacing: 0.05em;
-        margin-bottom: 32px;
-        margin-top: 12px;
+        margin-bottom: 20px;
+        margin-top: 8px;
         color: var(--text-cyber);
         text-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
       }
 
-      .search-container {
-        margin-bottom: 24px;
+      @media (min-width: 640px) {
+        section h2 {
+          font-size: 1.8rem;
+          margin-bottom: 24px;
+        }
       }
+
+      @media (min-width: 1024px) {
+        section h2 {
+          font-size: 2.5rem;
+          margin-bottom: 32px;
+          margin-top: 12px;
+        }
+      }
+
+      /* MOBILE FIRST - Search */
+      .search-container {
+        margin-bottom: 20px;
+      }
+
+      @media (min-width: 768px) {
+        .search-container {
+          margin-bottom: 24px;
+        }
+      }
+
       #search-input {
         width: 100%;
-        padding: 14px 18px;
+        padding: 12px 14px;
         background: var(--bg-secondary);
         border: 2px solid var(--border-secondary);
         color: var(--text-primary);
         font-family: inherit;
-        font-size: 0.95rem;
+        font-size: 0.9rem;
         transition: all 0.3s ease;
       }
+
+      @media (min-width: 640px) {
+        #search-input {
+          padding: 14px 16px;
+          font-size: 0.95rem;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        #search-input {
+          padding: 14px 18px;
+        }
+      }
+
       #search-input:focus {
         outline: none;
         border-color: var(--border-primary);
         box-shadow: 0 0 0 4px var(--border-glow), var(--shadow-glow);
       }
+
       #search-input::placeholder {
         color: var(--text-muted);
         opacity: 0.6;
       }
+
+      /* MOBILE FIRST - Table */
+      .comics-table {
+        width: 100%;
+        border: none;
+        margin-top: 0;
+      }
+
+      .comics-table thead {
+        display: none;
+      }
+
+      .comics-table tbody {
+        display: block;
+      }
+
+      .comics-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 2px solid var(--border-secondary);
+        background: var(--bg-secondary);
+        padding: 16px;
+        transition: border-color 0.3s ease;
+      }
+
+      .comics-table tr:hover {
+        border-color: var(--border-primary);
+      }
+
+      .comics-table td {
+        display: block;
+        padding: 10px 0;
+        border-bottom: 1px solid var(--border-secondary);
+        text-align: left;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+      }
+
+      .comics-table tr td:first-child {
+        padding-top: 0;
+      }
+
+      .comics-table tr td:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+      }
+
+      .comics-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 700;
+        color: var(--text-cyber);
+        margin-bottom: 8px;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .comics-table img {
+        width: 100px;
+        max-width: 100%;
+        height: auto;
+        border: 2px solid var(--border-primary);
+        display: block;
+      }
+
+      @media (min-width: 480px) {
+        .comics-table img {
+          width: 120px;
+        }
+      }
+
+      .comics-table td[data-label="Portada"]::before {
+        display: none;
+      }
+
+      .comics-table td[data-label="Portada"] {
+        text-align: center;
+        padding-bottom: 16px;
+      }
+
+      .comics-table td a {
+        color: var(--text-cyber);
+        text-decoration: none;
+        transition: color 0.3s ease;
+        word-break: break-word;
+      }
+
+      .comics-table td a:hover {
+        color: var(--text-primary);
+        text-decoration: underline;
+      }
+
+      /* TABLET & DESKTOP - Table */
+      @media (min-width: 768px) {
+        .comics-table {
+          border-collapse: collapse;
+          border: 2px solid var(--border-secondary);
+          margin-top: 24px;
+        }
+
+        .comics-table thead {
+          display: table-header-group;
+          background: var(--bg-panel);
+        }
+
+        .comics-table thead th {
+          padding: 14px 12px;
+          text-align: left;
+          font-weight: 700;
+          color: var(--text-cyber);
+          text-transform: uppercase;
+          font-size: 0.8rem;
+          letter-spacing: 0.05em;
+          border-bottom: 2px solid var(--border-primary);
+        }
+
+        .comics-table tbody {
+          display: table-row-group;
+        }
+
+        .comics-table tr {
+          display: table-row;
+          margin-bottom: 0;
+          border: none;
+          background: transparent;
+          padding: 0;
+        }
+
+        .comics-table td {
+          display: table-cell;
+          padding: 12px;
+          border-bottom: 1px solid var(--border-secondary);
+          text-align: left;
+          vertical-align: middle;
+        }
+
+        .comics-table td::before {
+          display: none;
+        }
+
+        .comics-table tbody tr:hover {
+          background-color: var(--bg-hover);
+        }
+
+        .comics-table img {
+          width: 60px;
+        }
+
+        .comics-table td[data-label="Portada"] {
+          text-align: left;
+          padding: 12px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        .comics-table thead th {
+          padding: 14px 18px;
+          font-size: 0.85rem;
+        }
+
+        .comics-table td {
+          padding: 14px 18px;
+        }
+
+        .comics-table img {
+          width: 70px;
+        }
+      }
+
+      /* MOBILE FIRST - Pagination */
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 24px;
+      }
+
+      @media (min-width: 640px) {
+        .pagination {
+          gap: 8px;
+          margin-top: 32px;
+        }
+      }
+
+      .pagination button {
+        padding: 8px 12px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-secondary);
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: 0.8rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 40px;
+      }
+
+      @media (min-width: 640px) {
+        .pagination button {
+          padding: 10px 16px;
+          font-size: 0.85rem;
+          min-width: 44px;
+        }
+      }
+
+      .pagination button:hover:not(:disabled) {
+        background: var(--bg-hover);
+        border-color: var(--border-primary);
+        color: var(--text-cyber);
+      }
+
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .pagination button.active {
+        background: var(--gradient-cyber);
+        border-color: var(--border-primary);
+        color: var(--bg-primary);
+        box-shadow: var(--shadow-glow);
+      }
+
+      /* Animaciones reducidas */
       @media (prefers-reduced-motion: reduce) {
         *,
         *::before,
@@ -281,90 +713,13 @@
         }
       }
     </style>
-    <!-- Estilos específicos para la tabla de cómics -->
-    <style>
-      .comics-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 24px;
-        border: 2px solid var(--border-secondary);
-      }
-      .comics-table th,
-      .comics-table td {
-        padding: 14px 18px;
-        border-bottom: 1px solid var(--border-secondary);
-        text-align: left;
-        font-size: 0.9rem;
-        vertical-align: middle;
-      }
-      .comics-table thead {
-        background-color: var(--bg-secondary);
-        color: var(--text-cyber);
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-weight: 700;
-      }
-      .comics-table tbody tr:hover {
-        background-color: var(--bg-hover);
-      }
-      .comics-table img {
-        width: 60px;
-        height: auto;
-        display: block;
-        border: 2px solid var(--border-primary);
-        background: #fff;
-      }
-      .comics-table a {
-        color: var(--text-cyber);
-        text-decoration: none;
-        font-weight: 700;
-      }
-      .comics-table a:hover {
-        text-decoration: underline;
-        text-shadow: 0 0 8px var(--border-glow);
-      }
-
-      .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        margin-top: 32px;
-      }
-      .pagination button {
-        padding: 10px 16px;
-        background: var(--bg-secondary);
-        border: 2px solid var(--border-secondary);
-        color: var(--text-secondary);
-        font-family: inherit;
-        font-size: 0.85rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-      .pagination button:hover:not(:disabled) {
-        background: var(--bg-hover);
-        border-color: var(--border-primary);
-        color: var(--text-cyber);
-      }
-      .pagination button:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-      .pagination button.active {
-        background: var(--gradient-cyber);
-        border-color: var(--border-primary);
-        color: var(--bg-primary);
-        box-shadow: var(--shadow-glow);
-      }
-    </style>
   </head>
   <body>
     <canvas id="node-canvas"></canvas>
 
     <div class="container">
       <header>
-        <h1>C. O. M. I. C. S.</h1>
+        <h1>C.O.M.I.C.S.</h1>
         <div class="header-subline">
           <p>
             Datos extraídos del archivo local 'comics.json' y presentados con la
@@ -378,7 +733,11 @@
         <section data-label="[ DATABASE: COMICS ]">
           <h2>Listado Completo</h2>
           <div class="search-container">
-            <input type="search" id="search-input" placeholder="// Buscar por título...">
+            <input
+              type="search"
+              id="search-input"
+              placeholder="// Buscar por título..."
+            />
           </div>
           <table class="comics-table">
             <thead>
@@ -399,7 +758,6 @@
 
     <script src="js/comic-loader.js"></script>
 
-    <!-- Script del canvas de fondo -->
     <script>
       const canvas = document.getElementById("node-canvas");
       const ctx = canvas.getContext("2d");
@@ -407,7 +765,7 @@
       canvas.height = window.innerHeight;
 
       let nodes = [];
-      const numNodes = 50;
+      const numNodes = window.innerWidth < 768 ? 30 : 50; // Menos nodos en móvil
       const maxDist = 200;
       let mouse = { x: null, y: null };
 
@@ -435,7 +793,8 @@
 
       function init() {
         nodes = [];
-        for (let i = 0; i < numNodes; i++) {
+        const nodeCount = window.innerWidth < 768 ? 30 : 50;
+        for (let i = 0; i < nodeCount; i++) {
           const x = Math.random() * canvas.width;
           const y = Math.random() * canvas.height;
           const vx = (Math.random() - 0.5) * 0.5;
@@ -494,14 +853,18 @@
         canvas.height = window.innerHeight;
         init();
       });
-      window.addEventListener("mousemove", (e) => {
-        mouse.x = e.x;
-        mouse.y = e.y;
-      });
-      window.addEventListener("mouseout", () => {
-        mouse.x = null;
-        mouse.y = null;
-      });
+
+      // Solo activar mouse tracking en pantallas grandes
+      if (window.innerWidth >= 768) {
+        window.addEventListener("mousemove", (e) => {
+          mouse.x = e.x;
+          mouse.y = e.y;
+        });
+        window.addEventListener("mouseout", () => {
+          mouse.x = null;
+          mouse.y = null;
+        });
+      }
 
       init();
       animate();
