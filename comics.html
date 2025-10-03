@@ -4,239 +4,507 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Listado de Cómics - Mi Blog CRT</title>
-    <!-- Los estilos son los mismos, no hace falta copiarlos de nuevo si están en un .css -->
-    <!-- Como estaban en el HTML, los he copiado aquí para que funcione -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@400;600&display=swap"
-      rel="stylesheet"
-    />
+
+    <!-- Estilos de index.html -->
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap");
+
       :root {
         color-scheme: dark;
-        --bg-main: #030303;
-        --bg-panel: rgba(4, 12, 4, 0.94);
-        --accent: #9dff78;
-        --accent-strong: #54ff42;
-        --text-primary: #a2ff91;
-        --text-secondary: #6aed78;
-        --border: 1px solid rgba(157, 255, 120, 0.7);
-        --container-pad: clamp(18px, 5vw, 36px);
-        font-family: "Share Tech Mono", "IBM Plex Mono", monospace;
+        --bg-primary: #0a0e1a;
+        --bg-secondary: #131824;
+        --bg-panel: #1a1f2e;
+        --bg-header: #00ffcc;
+        --bg-hover: #162033;
+        --gradient-cyber: linear-gradient(
+          135deg,
+          #00ffcc 0%,
+          #00d4cc 50%,
+          #00a8cc 100%
+        );
+        --gradient-accent: linear-gradient(135deg, #00ffcc 0%, #7b61ff 100%);
+        --gradient-dark: linear-gradient(180deg, #1a1f2e 0%, #0f1419 100%);
+        --text-primary: #e8f0ff;
+        --text-secondary: #99a8c4;
+        --text-muted: #6b7a94;
+        --text-cyber: #00ffcc;
+        --border-primary: #00ffcc;
+        --border-secondary: #2a3550;
+        --border-glow: rgba(0, 255, 204, 0.3);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+        --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+        --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+        --shadow-glow: 0 0 20px var(--border-glow),
+          0 0 40px rgba(0, 255, 204, 0.15);
+        --shadow-glow-strong: 0 0 30px rgba(0, 255, 204, 0.5),
+          0 0 60px rgba(0, 255, 204, 0.2);
       }
       * {
         box-sizing: border-box;
+        margin: 0;
+        padding: 0;
       }
       body {
-        margin: 0;
-        min-height: 100vh;
-        background: radial-gradient(
-            circle at 12% 18%,
-            rgba(90, 255, 140, 0.2),
-            transparent 58%
-          ),
-          radial-gradient(
-            circle at 86% 74%,
-            rgba(80, 240, 120, 0.18),
-            transparent 55%
-          ),
-          var(--bg-main);
+        font-family: "JetBrains Mono", "Courier New", monospace;
+        background: var(--bg-primary);
         color: var(--text-primary);
-        padding: 16px 0 56px;
+        line-height: 1.6;
+        min-height: 100vh;
         position: relative;
         overflow-x: hidden;
       }
       body::before {
         content: "";
         position: fixed;
-        inset: 0;
-        background-image: linear-gradient(
-            rgba(120, 255, 150, 0.08) 1px,
-            transparent 1px
-          ),
-          linear-gradient(90deg, rgba(120, 255, 150, 0.08) 1px, transparent 1px);
-        background-size: 120px 120px;
-        opacity: 0.42;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 204, 0.03) 0px,
+          transparent 1px,
+          transparent 2px,
+          rgba(0, 255, 204, 0.03) 3px
+        );
         pointer-events: none;
-        z-index: -2;
+        z-index: 9999;
+        animation: scanline 8s linear infinite;
+      }
+      @keyframes scanline {
+        0% {
+          transform: translateY(0);
+        }
+        100% {
+          transform: translateY(10px);
+        }
+      }
+      #node-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        opacity: 0.15;
       }
       .container {
-        width: 100%;
-        margin: 0;
-        background: var(--bg-panel);
-        border: var(--border);
-        padding: var(--container-pad);
-        box-shadow: none;
         position: relative;
         z-index: 1;
-        min-height: calc(100vh - 56px);
-      }
-      .container::after {
-        content: "";
-        position: absolute;
-        inset: 6px;
-        border: 1px dashed rgba(120, 255, 150, 0.27);
-        pointer-events: none;
+        max-width: 1435px;
+        margin: 0 auto;
+        padding: clamp(24px, 5vw, 60px);
       }
       header {
-        padding: clamp(20px, 6vw, 50px);
-        border: var(--border);
-        border-color: var(--accent-strong);
-        background: rgba(1, 9, 3, 0.9);
-        margin-bottom: clamp(24px, 7vw, 46px);
+        background: var(--gradient-dark);
+        border: 2px solid var(--border-primary);
+        padding: clamp(40px, 6vw, 40px);
+        margin-bottom: clamp(32px, 3vw, 500px);
+        position: relative;
+        overflow: hidden;
+        box-shadow: var(--shadow-glow);
+      }
+      header::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 6px;
+        background: var(--gradient-cyber);
+        box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+      }
+      header::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(0, 255, 204, 0.05) 0%,
+          transparent 70%
+        );
+      }
+      header:hover::after {
+        animation: pulse 0.6s ease-in-out;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 0.3;
+          transform: scale(1);
+        }
+        50% {
+          opacity: 0.6;
+          transform: scale(1.05);
+        }
+      }
+      header > * {
+        position: relative;
+        z-index: 1;
+      }
+      h1 {
+        font-size: clamp(2.5rem, 6vw, 4rem);
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        margin-bottom: 20px;
+        background: var(--gradient-cyber);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+      }
+      header p {
+        color: var(--text-secondary);
+        font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+        max-width: 80ch;
+        line-height: 1.7;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+      .header-subline {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .header-subline p {
+        margin-bottom: 0;
+        flex: 1;
+        min-width: 300px;
+      }
+      .nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 12px 24px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-primary);
+        color: var(--text-cyber);
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
       }
-      header::before {
-        content: "[STATUS: DATASTREAM]";
+      .nav-link::before {
+        content: "";
         position: absolute;
-        top: 14px;
-        right: clamp(12px, 4vw, 28px);
-        font-size: 0.78rem;
-        letter-spacing: 4px;
-        color: var(--text-secondary);
-      }
-      header h1 {
-        margin: 0 0 14px;
-        font-size: clamp(1.6rem, 5.8vw, 2.6rem);
-        text-transform: uppercase;
-        letter-spacing: 5px;
-        padding-bottom: 12px;
-        border-bottom: var(--border);
-      }
-      header p {
-        margin: 0;
-        font-size: clamp(0.9rem, 3.3vw, 1.06rem);
-        color: var(--text-secondary);
-        line-height: 1.6;
-      }
-      .nav-link {
-        display: inline-block;
-        margin-top: clamp(16px, 4vw, 22px);
-        padding: 9px 18px;
-        border: var(--border);
-        color: var(--accent);
-        text-decoration: none;
-        text-transform: uppercase;
-        letter-spacing: 3px;
-        transition: all 0.25s ease;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--gradient-cyber);
+        transition: left 0.3s ease;
+        z-index: -1;
       }
       .nav-link:hover {
-        background: var(--accent);
-        color: #021402;
-        box-shadow: 0 0 14px rgba(157, 255, 120, 0.45);
+        color: var(--bg-primary);
+        box-shadow: var(--shadow-glow-strong);
+        transform: translateY(-2px);
+      }
+      .nav-link:hover::before {
+        left: 0;
       }
       main {
         display: grid;
-        gap: clamp(24px, 6vw, 38px);
+        gap: clamp(24px, 4vw, 48px);
       }
-      .section-wrapper {
+      section {
+        background: var(--gradient-dark);
+        border: 2px solid var(--border-secondary);
+        padding: clamp(32px, 5vw, 32px);
         position: relative;
+        box-shadow: var(--shadow-lg);
+        transition: border-color 0.3s ease;
       }
-      .section-wrapper::before {
-        content: "";
+      section:hover {
+        border-color: var(--border-primary);
+      }
+      section::before {
+        content: attr(data-label);
         position: absolute;
-        inset: -12px;
-        border: 1px dashed rgba(97, 206, 117, 0.22);
-        pointer-events: none;
+        top: -14px;
+        left: 32px;
+        padding: 6px 20px;
+        background: var(--gradient-cyber);
+        color: var(--bg-primary);
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.15em;
+        box-shadow: var(--shadow-glow);
       }
-      .section-title {
-        position: absolute;
-        top: -18px;
-        left: clamp(10px, 6vw, 28px);
-        background: #000c03;
-        padding: 6px 16px;
-        border: var(--border);
-        font-size: 0.76rem;
-        letter-spacing: 4px;
-        text-transform: uppercase;
-        z-index: 2;
-      }
-      .section-box {
-        border: var(--border);
-        padding: clamp(18px, 6vw, 34px);
-        background: rgba(0, 10, 2, 0.92);
-        position: relative;
+      section h2 {
+        font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+        font-weight: 800;
+        letter-spacing: 0.05em;
+        margin-bottom: 32px;
+        margin-top: 12px;
+        color: var(--text-cyber);
+        text-shadow: 0 0 20px rgba(0, 255, 204, 0.3);
       }
 
-      /* Estilos para la tabla */
+      .search-container {
+        margin-bottom: 24px;
+      }
+      #search-input {
+        width: 100%;
+        padding: 14px 18px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-secondary);
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: all 0.3s ease;
+      }
+      #search-input:focus {
+        outline: none;
+        border-color: var(--border-primary);
+        box-shadow: 0 0 0 4px var(--border-glow), var(--shadow-glow);
+      }
+      #search-input::placeholder {
+        color: var(--text-muted);
+        opacity: 0.6;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+    <!-- Estilos específicos para la tabla de cómics -->
+    <style>
       .comics-table {
         width: 100%;
         border-collapse: collapse;
         margin-top: 24px;
+        border: 2px solid var(--border-secondary);
       }
       .comics-table th,
       .comics-table td {
-        padding: 12px 16px;
-        border: 1px solid rgba(157, 255, 120, 0.3);
+        padding: 14px 18px;
+        border-bottom: 1px solid var(--border-secondary);
         text-align: left;
-        font-size: clamp(0.8rem, 3vw, 0.95rem);
+        font-size: 0.9rem;
+        vertical-align: middle;
       }
       .comics-table thead {
-        background-color: rgba(157, 255, 120, 0.1);
+        background-color: var(--bg-secondary);
+        color: var(--text-cyber);
         text-transform: uppercase;
-        letter-spacing: 2px;
+        letter-spacing: 0.1em;
+        font-weight: 700;
       }
       .comics-table tbody tr:hover {
-        background-color: rgba(157, 255, 120, 0.08);
+        background-color: var(--bg-hover);
       }
       .comics-table img {
         width: 60px;
         height: auto;
         display: block;
-        border: 1px solid rgba(157, 255, 120, 0.3);
+        border: 2px solid var(--border-primary);
+        background: #fff;
       }
       .comics-table a {
-        color: var(--accent);
+        color: var(--text-cyber);
         text-decoration: none;
+        font-weight: 700;
       }
       .comics-table a:hover {
         text-decoration: underline;
+        text-shadow: 0 0 8px var(--border-glow);
       }
 
-      @media (min-width: 640px) {
-        body {
-          padding: 32px clamp(28px, 7vw, 48px) 72px;
-        }
-        .container {
-          max-width: 1180px;
-          margin: 0 auto;
-          box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.65);
-        }
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        margin-top: 32px;
+      }
+      .pagination button {
+        padding: 10px 16px;
+        background: var(--bg-secondary);
+        border: 2px solid var(--border-secondary);
+        color: var(--text-secondary);
+        font-family: inherit;
+        font-size: 0.85rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .pagination button:hover:not(:disabled) {
+        background: var(--bg-hover);
+        border-color: var(--border-primary);
+        color: var(--text-cyber);
+      }
+      .pagination button:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+      .pagination button.active {
+        background: var(--gradient-cyber);
+        border-color: var(--border-primary);
+        color: var(--bg-primary);
+        box-shadow: var(--shadow-glow);
       }
     </style>
   </head>
   <body>
+    <canvas id="node-canvas"></canvas>
+
     <div class="container">
       <header>
-        <h1>Listado Completo de Cómics</h1>
-        <p>Datos extraídos del archivo local 'comics.json'.</p>
-        <a href="index.html" class="nav-link">[ VOLVER A PRODUCTOS ]</a>
+        <h1>C. O. M. I. C. S.</h1>
+        <div class="header-subline">
+          <p>
+            Datos extraídos del archivo local 'comics.json' y presentados con la
+            interfaz S.Y.N.T.H.
+          </p>
+          <a href="index.html" class="nav-link">[ VOLVER A S.Y.N.T.H. BLOG ]</a>
+        </div>
       </header>
 
       <main>
-        <section class="section-wrapper">
-          <div class="section-title">[ DATABASE: COMICS ]</div>
-          <div class="section-box">
-            <table class="comics-table">
-              <thead>
-                <tr>
-                  <th>Portada</th>
-                  <th>Título</th>
-                  <th>Precio</th>
-                </tr>
-              </thead>
-              <tbody id="comics-tbody">
-                <!-- El contenido se generará aquí con JavaScript -->
-              </tbody>
-            </table>
+        <section data-label="[ DATABASE: COMICS ]">
+          <h2>Listado Completo</h2>
+          <div class="search-container">
+            <input type="search" id="search-input" placeholder="// Buscar por título...">
           </div>
+          <table class="comics-table">
+            <thead>
+              <tr>
+                <th>Portada</th>
+                <th>Título</th>
+                <th>Precio</th>
+              </tr>
+            </thead>
+            <tbody id="comics-tbody">
+              <!-- El contenido se generará aquí con JavaScript -->
+            </tbody>
+          </table>
+          <div id="pagination-controls" class="pagination"></div>
         </section>
       </main>
     </div>
 
-    <!-- Referencia al script que cargará los datos -->
     <script src="js/comic-loader.js"></script>
+
+    <!-- Script del canvas de fondo -->
+    <script>
+      const canvas = document.getElementById("node-canvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      let nodes = [];
+      const numNodes = 50;
+      const maxDist = 200;
+      let mouse = { x: null, y: null };
+
+      class Node {
+        constructor(x, y, vx, vy) {
+          this.x = x;
+          this.y = y;
+          this.vx = vx;
+          this.vy = vy;
+          this.radius = 2;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(0, 255, 204, 0.5)";
+          ctx.fill();
+        }
+        update() {
+          if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+          if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+          this.x += this.vx;
+          this.y += this.vy;
+        }
+      }
+
+      function init() {
+        nodes = [];
+        for (let i = 0; i < numNodes; i++) {
+          const x = Math.random() * canvas.width;
+          const y = Math.random() * canvas.height;
+          const vx = (Math.random() - 0.5) * 0.5;
+          const vy = (Math.random() - 0.5) * 0.5;
+          nodes.push(new Node(x, y, vx, vy));
+        }
+      }
+
+      function drawLines() {
+        for (let i = 0; i < nodes.length; i++) {
+          for (let j = i + 1; j < nodes.length; j++) {
+            const dist = Math.hypot(
+              nodes[i].x - nodes[j].x,
+              nodes[i].y - nodes[j].y
+            );
+            if (dist < maxDist) {
+              ctx.beginPath();
+              ctx.moveTo(nodes[i].x, nodes[i].y);
+              ctx.lineTo(nodes[j].x, nodes[j].y);
+              ctx.strokeStyle = `rgba(0, 255, 204, ${1 - dist / maxDist})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          }
+        }
+      }
+
+      function drawMouseLines() {
+        if (mouse.x === null) return;
+        for (let i = 0; i < nodes.length; i++) {
+          const dist = Math.hypot(nodes[i].x - mouse.x, nodes[i].y - mouse.y);
+          if (dist < maxDist) {
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(mouse.x, mouse.y);
+            ctx.strokeStyle = `rgba(0, 255, 204, ${1 - dist / maxDist})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        nodes.forEach((node) => {
+          node.update();
+          node.draw();
+        });
+        drawLines();
+        drawMouseLines();
+        requestAnimationFrame(animate);
+      }
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        init();
+      });
+      window.addEventListener("mousemove", (e) => {
+        mouse.x = e.x;
+        mouse.y = e.y;
+      });
+      window.addEventListener("mouseout", () => {
+        mouse.x = null;
+        mouse.y = null;
+      });
+
+      init();
+      animate();
+    </script>
   </body>
 </html>

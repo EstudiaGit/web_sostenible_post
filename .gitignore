@@ -39,6 +39,5 @@ docker-compose.override.yml
 node_modules/
 npm-debug.log
 .gemini/
+docs/
 GEMINI.md
-info_wed_sostenible_grok_fast.md
-DIRECTRICES_WEB_SOSTENIBLE.md
