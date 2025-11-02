@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Top Comics - Mi Blog CRT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=IBM+Plex+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-primary: #0a0e1a;
+            --bg-secondary: #131824;
+            --bg-panel: #1a1f2e;
+            --bg-header: #00ffcc;
+            --bg-hover: #162033;
+            --gradient-cyber: linear-gradient(135deg, #00ffcc 0%, #00d4cc 50%, #00a8cc 100%);
+            --gradient-accent: linear-gradient(135deg, #00ffcc 0%, #7b61ff 100%);
+            --gradient-dark: linear-gradient(180deg, #1a1f2e 0%, #0f1419 100%);
+            --text-primary: #e8f0ff;
+            --text-secondary: #99a8c4;
+            --text-muted: #6b7a94;
+            --text-cyber: #00ffcc;
+            --border-primary: #00ffcc;
+            --border-secondary: #2a3550;
+            --border-glow: rgba(0, 255, 204, 0.3);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px var(--border-glow), 0 0 40px rgba(0, 255, 204, 0.15);
+            --shadow-glow-strong: 0 0 30px rgba(0, 255, 204, 0.5), 0 0 60px rgba(0, 255, 204, 0.2);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: "JetBrains Mono", "Courier New", monospace;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0, 255, 204, 0.03) 0px, transparent 1px, transparent 2px, rgba(0, 255, 204, 0.03) 3px);
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline 8s linear infinite;
+        }
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(10px); }
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: clamp(24px, 5vw, 60px);
+        }
+        header {
+            background: var(--gradient-dark);
+            border: 2px solid var(--border-primary);
+            padding: clamp(20px, 4vw, 40px);
+            margin-bottom: clamp(32px, 5vw, 60px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-glow);
+        }
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 6px;
+            background: var(--gradient-cyber);
+            box-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+        }
+        h1 {
+            font-size: clamp(2rem, 6vw, 3rem);
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            margin-bottom: 20px;
+            background: var(--gradient-cyber);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 30px rgba(0, 255, 204, 0.3);
+        }
+        .nav-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-primary);
+            color: var(--text-cyber);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .nav-link:hover {
+            color: var(--bg-primary);
+            box-shadow: var(--shadow-glow-strong);
+            transform: translateY(-2px);
+        }
+        main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(24px, 4vw, 48px);
+        }
+        .comic-card {
+            background: var(--bg-panel);
+            border: 2px solid var(--border-secondary);
+            padding: 20px;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            transition: all 0.3s ease;
+            min-height: 320px; /* Altura mínima para uniformidad */
+            align-items: stretch; /* Estirar items para igualar altura */
+        }
+        .comic-card:hover {
+            border-color: var(--border-primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        .comic-image {
+            flex: 0 0 200px;
+            display: flex; /* Para que el contenido interno pueda usar flexbox */
+            /* align-items: center; -- Eliminado para permitir que la imagen se estire */
+        }
+        .comic-image img {
+            width: 100%;
+            height: 100%; /* Ocupar toda la altura */
+            object-fit: cover; /* Escalar sin deformar */
+            border: 1px solid var(--border-secondary);
+        }
+        .comic-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .comic-info h2 {
+            font-size: 1.4rem;
+            color: var(--text-primary);
+            line-height: 1.4;
+            margin-bottom: 10px;
+        }
+        .comic-info .price {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-cyber);
+            text-shadow: 0 0 10px var(--border-glow);
+            margin-bottom: 10px;
+        }
+        .comic-info .availability {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 15px;
+        }
+        .comic-info .description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            border-top: 1px solid var(--border-secondary);
+            padding-top: 15px;
+            margin-bottom: 15px;
+        }
+        .details {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-secondary);
+            padding-top: 15px;
+        }
+        .details ul {
+            list-style: none;
+            padding: 0;
+            column-count: 2;
+            column-gap: 20px;
+        }
+        .details li {
+            margin-bottom: 8px;
+        }
+        .details strong {
+            color: var(--text-secondary);
+        }
+        @media (max-width: 768px) {
+            .comic-card {
+                flex-direction: column;
+            }
+            .comic-image {
+                flex: 0 0 auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Top Cómics</h1>
+            <a href="productos_leprechaun.html" class="nav-link">[ VOLVER A PRODUCTOS ]</a>
+        </header>
+        <main id="comics-container">
+            <!-- Los cómics se insertarán aquí -->
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const data = {
+                "comics": [
+                    {
+                        "titulo": "Los Diarios de la Boticaria 8",
+                        "precio_final": 9.45,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12947-los-diarios-de-la-boticaria-8-9791387885090.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/48019-large_default/los-diarios-de-la-boticaria-8.jpg",
+                        "descripcion_corta": "Maomao, una astuta criada en el palacio imperial durante la Edad Media, utiliza sus conocimientos de farmacia para resolver misterios médicos.",
+                        "detalles_tecnicos": { "autores": ["Itsuki Nanao", "Natsu Hyûga", "Nekokurage"], "isbn": "9791387885090", "ean": "", "numero_paginas": 184, "formato": "Rústica con Sobrecubierta", "dimensiones": "128 mm X 180 mm", "editorial": "Devir" }
+                    },
+                    {
+                        "titulo": "Baki: The Grappler 15 (Edición Kanzenban)",
+                        "precio_final": 17.1,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12732-baki-the-grappler-15-edicion-kanzenban-9791387892371.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47386-medium_default/baki-the-grappler-15-edicion-kanzenban.jpg",
+                        "descripcion_corta": "Baki, entrenado por su temido padre Yujiro Hanma, busca superarlo y convertirse en el luchador más fuerte del mundo en un camino de odio y resentimiento.",
+                        "detalles_tecnicos": { "autores": ["Kisuke Itagaki"], "isbn": "9791387892371", "ean": "9791387892371", "numero_paginas": 350, "formato": "Rústica con Sobrecubierta", "dimensiones": "148 x 210 mm", "editorial": "Ivrea" }
+                    },
+                    {
+                        "titulo": "Contigo bajo la Lluvia 1",
+                        "precio_final": 9.03,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12881-contigo-bajo-la-lluvia-1-9782811699482.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47787-medium_default/contigo-bajo-la-lluvia-1.jpg",
+                        "descripcion_corta": "Este hermoso manga narra la conmovedora historia de una joven que decide adoptar a un peculiar y misterioso animalito que encuentra abandonado en la calle.",
+                        "detalles_tecnicos": { "autores": ["Nikaido"], "isbn": "9782811699482", "ean": "", "numero_paginas": 144, "formato": "Rústica con Sobrecubierta", "dimensiones": "130 mm X 180 mm", "editorial": "Pika Ediciones" }
+                    },
+                    {
+                        "titulo": "Blue Lock 27",
+                        "precio_final": 8.08,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12734-blue-lock-27-9788410492554.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47387-large_default/blue-lock-27.jpg",
+                        "descripcion_corta": "La intensa batalla por el rol de protagonista alcanza su clímax. El emocionante partido contra el equipo Ubers finalmente concluirá de una manera espectacular.",
+                        "detalles_tecnicos": { "autores": ["Muneyuki Kaneshiro", "Yusuke Nomura"], "isbn": "9788410492554", "ean": "9788410492554", "numero_paginas": 192, "formato": "Tomo en Tapa Dura / Cartoné (HC)", "dimensiones": "111x177 mm", "editorial": "Planeta Cómic" }
+                    },
+                    {
+                        "titulo": "Ataque a los Titanes edición coleccionista 11",
+                        "precio_final": 23.28,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12887-ataque-a-los-titanes-edicion-coleccionista-11-9788467975420.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47792-medium_default/ataque-a-los-titanes-edicion-coleccionista-11.jpg",
+                        "descripcion_corta": "Llega un nuevo volumen de la edición de lujo de esta obra titánica, un éxito mundial con más de 120 millones de copias vendidas y múltiples adaptaciones.",
+                        "detalles_tecnicos": { "autores": ["Hajime Isayama"], "isbn": "9788467975420", "ean": "9788467975420", "numero_paginas": 560, "formato": "Tomo en Tapa Dura / Cartoné (HC)", "dimensiones": "148 mm X 180 mm", "editorial": "Norma Editorial" }
+                    },
+                    {
+                        "titulo": "Nana 3/07",
+                        "precio_final": 19,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12731-nana-307-9788410492578.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47385-medium_default/nana-307.jpg",
+                        "descripcion_corta": "Disfruta de la obra cumbre de Ai Yazawa en una edición kanzenban única en el mundo, que incluye las páginas a color originales de su publicación.",
+                        "detalles_tecnicos": { "autores": ["Ai Yazawa"], "isbn": "9788410492578", "ean": "", "numero_paginas": 672, "formato": "Cartoné con Sobrecubierta", "dimensiones": "148 x 210 mm", "editorial": "Planeta Cómic" }
+                    },
+                    {
+                        "titulo": "Grandmaster of demonic cultivation 11",
+                        "precio_final": 15.15,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12886-grandmaster-of-demonic-cultivation-11-9788467975451.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47791-large_default/grandmaster-of-demonic-cultivation-11.jpg",
+                        "descripcion_corta": "Una tragedia se desencadena en esta nueva entrega del aclamado manhua que adapta la famosa saga de novelas chinas de Mo Xiang Tong Xiu.",
+                        "detalles_tecnicos": { "autores": ["Luo Di Cheng Wu", "Mo Siang Tong Xiu"], "isbn": "9788467975451", "ean": "9788467975451", "numero_paginas": 232, "formato": "Rústica con Solapas", "dimensiones": "148mm X 210mm", "editorial": "Norma Editorial" }
+                    },
+                    {
+                        "titulo": "Adiós, mi Odín 01/03",
+                        "precio_final": 20.43,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12885-las-tres-estrella-de-la-calamidad-1-9791387779375.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47790-medium_default/las-tres-estrella-de-la-calamidad-1.jpg",
+                        "descripcion_corta": "El destino funciona de maneras misteriosas y, cuando menos te lo esperas, las calamidades llegan para cambiarlo todo por completo.",
+                        "detalles_tecnicos": { "autores": ["Chihiro Yoshioka"], "isbn": "9791387779375", "ean": "9791387779375", "numero_paginas": 512, "formato": "Rústica con Sobrecubierta", "dimensiones": "128 mm X 180 mm", "editorial": "Planeta Cómic" }
+                    },
+                    {
+                        "titulo": "Magical angel: Creamy Mami",
+                        "precio_final": 14.73,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12882-magical-angel-creamy-mami-9788410446908.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47789-large_default/magical-angel-creamy-mami.jpg",
+                        "descripcion_corta": "El destino funciona de maneras misteriosas y, cuando menos te lo esperas, las calamidades llegan para cambiarlo todo por completo.",
+                        "detalles_tecnicos": { "autores": ["Yuko Kitagawa"], "isbn": "9788410446908", "ean": "", "numero_paginas": 376, "formato": "Cartoné con Sobrecubierta", "dimensiones": "128 mm X 182 mm", "editorial": "ARECHI" }
+                    },
+                    {
+                        "titulo": "Atelier of Witch Hat, Vol 14 (Edición especial limitada)",
+                        "precio_final": 22.8,
+                        "disponibilidad": "Últimas unidades en stock",
+                        "url_producto": "https://www.leprechaun.es/manga/12735-atelier-of-witch-hat-vol-14-edicion-especial-limitada-9791387506995.html",
+                        "url_imagen_principal": "https://www.leprechaun.es/47390-large_default/atelier-of-witch-hat-vol-14-edicion-especial-limitada.jpg",
+                        "descripcion_corta": "La lucha contra las sanguijuelas cortina continúa, llevando el caos y numerosos heridos a la ciudad de Ezrest tras el Desfile de la Noche de Plata.",
+                        "detalles_tecnicos": { "autores": ["Kamome Shirahama"], "isbn": "9791387506995", "ean": "", "numero_paginas": 176, "formato": "Rústica con Sobrecubierta", "dimensiones": "130 x 180 mm", "editorial": "Milky Way Ediciones" }
+                    }
+                ]
+            };
+
+            const container = document.getElementById('comics-container');
+            if (data.comics && container) {
+                data.comics.forEach(comic => {
+                    const comicElement = document.createElement('article');
+                    comicElement.className = 'comic-card';
+
+                    const authors = comic.detalles_tecnicos.autores.join(', ');
+
+                    comicElement.innerHTML = `
+                        <div class="comic-image">
+                            <a href="${comic.url_producto}" target="_blank">
+                                <img src="${comic.url_imagen_principal}" alt="${comic.titulo}">
+                            </a>
+                        </div>
+                        <div class="comic-info">
+                            <h2>${comic.titulo}</h2>
+                            <p class="price">${comic.precio_final.toFixed(2)} €</p>
+                            <p class="availability">${comic.disponibilidad}</p>
+                            <p class="description">${comic.descripcion_corta}</p>
+                            <div class="details">
+                                <ul>
+                                    <li><strong>Autores:</strong> ${authors}</li>
+                                    <li><strong>ISBN:</strong> ${comic.detalles_tecnicos.isbn}</li>
+                                    <li><strong>EAN:</strong> ${comic.detalles_tecnicos.ean}</li>
+                                    <li><strong>Páginas:</strong> ${comic.detalles_tecnicos.numero_paginas}</li>
+                                    <li><strong>Formato:</strong> ${comic.detalles_tecnicos.formato}</li>
+                                    <li><strong>Dimensiones:</strong> ${comic.detalles_tecnicos.dimensiones}</li>
+                                    <li><strong>Editorial:</strong> ${comic.detalles_tecnicos.editorial}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(comicElement);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

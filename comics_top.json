@@ -1,0 +1,174 @@
+{
+  "comics": [
+    {
+      "titulo": "Los Diarios de la Boticaria 8",
+      "precio_final": 9.45,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12947-los-diarios-de-la-boticaria-8-9791387885090.html",
+      "url_imagen_principal": "https://www.leprechaun.es/48019-large_default/los-diarios-de-la-boticaria-8.jpg",
+      "descripcion_corta": "Maomao es una criada del palacio imperial, en la Edad Media.",
+      "detalles_tecnicos": {
+        "autores": ["Itsuki Nanao", "Natsu Hyûga", "Nekokurage"],
+        "isbn": "9791387885090",
+        "ean": "",
+        "numero_paginas": 184,
+        "formato": "Rústica con Sobrecubierta",
+        "dimensiones": "128 mm X 180 mm",
+        "editorial": "Devir"
+      }
+    },
+    {
+      "titulo": "Baki: The Grappler 15 (Edición Kanzenban)",
+      "precio_final": 17.1,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12732-baki-the-grappler-15-edicion-kanzenban-9791387892371.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47386-medium_default/baki-the-grappler-15-edicion-kanzenban.jpg",
+      "descripcion_corta": "Baki fue entrenado por su padre, el infame Yujiro Hanma “el ogro”, un hombre temido en todo el planeta. Su único objetivo es que lo acabe derrotando y sea el más fuerte del mundo con un salvaje entrenamiento que traumatizó al joven Baki y lo llenó de odio y resentimiento.",
+      "detalles_tecnicos": {
+        "autores": ["Kisuke Itagaki"],
+        "isbn": "9791387892371",
+        "ean": "9791387892371",
+        "numero_paginas": 350,
+        "formato": "Rústica con Sobrecubierta",
+        "dimensiones": "148 x 210 mm",
+        "editorial": "Ivrea"
+      }
+    },
+    {
+      "titulo": "Contigo bajo la Lluvia 1",
+      "precio_final": 9.03,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12881-contigo-bajo-la-lluvia-1-9782811699482.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47787-medium_default/contigo-bajo-la-lluvia-1.jpg",
+      "descripcion_corta": "La protagonista de este hermoso manga adopta a un curioso animalito que se encuentra en la calle.",
+      "detalles_tecnicos": {
+        "autores": ["Nikaido"],
+        "isbn": "9782811699482",
+        "ean": "",
+        "numero_paginas": 144,
+        "formato": "Rústica con Sobrecubierta",
+        "dimensiones": "130 mm X 180 mm",
+        "editorial": "Pika Ediciones"
+      }
+    },
+    {
+      "titulo": "Blue Lock 27",
+      "precio_final": 8.08,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12734-blue-lock-27-9788410492554.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47387-large_default/blue-lock-27.jpg",
+      "descripcion_corta": "¡La batalla por el título de protagonista se intensifica! ¡¡El partido contra el Ubers concluirá por fin de una manera espectacular!!",
+      "detalles_tecnicos": {
+        "autores": ["Muneyuki Kaneshiro", "Yusuke Nomura"],
+        "isbn": "9788410492554",
+        "ean": "9788410492554",
+        "numero_paginas": 192,
+        "formato": "Tomo en Tapa Dura / Cartoné (HC)",
+        "dimensiones": "111x177 mm",
+        "editorial": "Planeta Cómic"
+      }
+    },
+    {
+      "titulo": "Ataque a los Titanes edición coleccionista 11",
+      "precio_final": 23.28,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12887-ataque-a-los-titanes-edicion-coleccionista-11-9788467975420.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47792-medium_default/ataque-a-los-titanes-edicion-coleccionista-11.jpg",
+      "descripcion_corta": "Llega a librerías un nuevo volumen de la edición coleccionista de esta titánica obra superventas con más de 120 millones de copias vendidas en todo el mundo y con varias adaptaciones animadas y cinematográficas.",
+      "detalles_tecnicos": {
+        "autores": ["Hajime Isayama"],
+        "isbn": "9788467975420",
+        "ean": "9788467975420",
+        "numero_paginas": 560,
+        "formato": "Tomo en Tapa Dura / Cartoné (HC)",
+        "dimensiones": "148 mm X 180 mm",
+        "editorial": "Norma Editorial"
+      }
+    },
+    {
+      "titulo": "Nana 3/07",
+      "precio_final": 19,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12731-nana-307-9788410492578.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47385-medium_default/nana-307.jpg",
+      "descripcion_corta": "¡La obra cumbre de Ai Yazawa en una edición kanzenban única en el mundo, con las páginas a color originales!",
+      "detalles_tecnicos": {
+        "autores": ["Ai Yazawa"],
+        "isbn": "9788410492578",
+        "ean": "",
+        "numero_paginas": 672,
+        "formato": "Cartoné con Sobrecubierta",
+        "dimensiones": "148 x 210 mm",
+        "editorial": "Planeta Cómic"
+      }
+    },
+    {
+      "titulo": "Grandmaster of demonic cultivation 11",
+      "precio_final": 15.15,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12886-grandmaster-of-demonic-cultivation-11-9788467975451.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47791-large_default/grandmaster-of-demonic-cultivation-11.jpg",
+      "descripcion_corta": "Se desencadena una tragedia. Nueva entrega del aclamado manhua que adapta la famosa saga de novelas chinas que ha arrasado en todo el mundo: Grandmaster of Demonic Cultivation, de Mo Xiang Tong Xiu.",
+      "detalles_tecnicos": {
+        "autores": ["Luo Di Cheng Wu", "Mo Siang Tong Xiu"],
+        "isbn": "9788467975451",
+        "ean": "9788467975451",
+        "numero_paginas": 232,
+        "formato": "Rústica con Solapas",
+        "dimensiones": "148mm X 210mm",
+        "editorial": "Norma Editorial"
+      }
+    },
+    {
+      "titulo": "Adiós, mi Odín 01/03",
+      "precio_final": 20.43,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12885-las-tres-estrella-de-la-calamidad-1-9791387779375.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47790-medium_default/las-tres-estrella-de-la-calamidad-1.jpg",
+      "descripcion_corta": "El destino funciona de maneras misteriosas, cuando menos te lo esperas, las calamidades llegan",
+      "detalles_tecnicos": {
+        "autores": ["Chihiro Yoshioka"],
+        "isbn": "9791387779375",
+        "ean": "9791387779375",
+        "numero_paginas": 512,
+        "formato": "Rústica con Sobrecubierta",
+        "dimensiones": "128 mm X 180 mm",
+        "editorial": "Planeta Cómic"
+      }
+    },
+    {
+      "titulo": "Magical angel: Creamy Mami",
+      "precio_final": 14.73,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12882-magical-angel-creamy-mami-9788410446908.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47789-large_default/magical-angel-creamy-mami.jpg",
+      "descripcion_corta": "El destino funciona de maneras misteriosas, cuando menos te lo esperas, las calamidades llegan",
+      "detalles_tecnicos": {
+        "autores": ["Yuko Kitagawa"],
+        "isbn": "9788410446908",
+        "ean": "",
+        "numero_paginas": 376,
+        "formato": "Cartoné con Sobrecubierta",
+        "dimensiones": "128 mm X 182 mm",
+        "editorial": "ARECHI"
+      }
+    },
+    {
+      "titulo": "Atelier of Witch Hat, Vol 14 (Edición especial limitada)",
+      "precio_final": 22.8,
+      "disponibilidad": "Últimas unidades en stock",
+      "url_producto": "https://www.leprechaun.es/manga/12735-atelier-of-witch-hat-vol-14-edicion-especial-limitada-9791387506995.html",
+      "url_imagen_principal": "https://www.leprechaun.es/47390-large_default/atelier-of-witch-hat-vol-14-edicion-especial-limitada.jpg",
+      "descripcion_corta": "La lucha contra las sanguijuelas cortina que han atacado Ezrest tras el Desfile de la Noche de Plata continúa, llevando el caos a la ciudad y causando numerosos heridos.",
+      "detalles_tecnicos": {
+        "autores": ["Kamome Shirahama"],
+        "isbn": "9791387506995",
+        "ean": "",
+        "numero_paginas": 176,
+        "formato": "Rústica con Sobrecubierta",
+        "dimensiones": "130 x 180 mm",
+        "editorial": "Milky Way Ediciones"
+      }
+    }
+  ]
+}
